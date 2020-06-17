@@ -1,0 +1,39 @@
+package com.tristanruecker.interviewexampleproject.controller;
+
+
+import com.tristanruecker.interviewexampleproject.base.IntegrationTestBaseClass;
+import com.tristanruecker.interviewexampleproject.base.api.LoginControllerApi;
+import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+
+public class LoginControllerITTest extends IntegrationTestBaseClass {
+
+    LoginControllerApi loginControllerApi;
+
+    @BeforeEach
+    public void createLoginControllerApi() {
+        this.loginControllerApi = createRetrofitClient(LoginControllerApi.class);
+    }
+
+    @Test
+    void optainJWTToken() throws IOException {
+        UserEmailAndPassword userEmailAndPassword = new UserEmailAndPassword();
+        userEmailAndPassword.setEmail("test.registration@gmail.com");
+        userEmailAndPassword.setPassword("test1234");
+
+        String jwtToken = loginControllerApi
+                .userLogin(userEmailAndPassword)
+                .execute()
+                .body()
+                .getJwtToken();
+
+        Assertions.assertTrue(jwtToken.length() > 0);
+    }
+
+
+}

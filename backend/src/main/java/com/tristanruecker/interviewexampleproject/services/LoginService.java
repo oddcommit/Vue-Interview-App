@@ -8,6 +8,8 @@ import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.TextConstants;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +27,7 @@ public class LoginService {
     private final CertificateUtils certificateUtils;
 
     private final UserRepository userRepository;
+    private final EmailValidator emailValidator;
 
     @Autowired
     public LoginService(CertificateUtils certificateUtils,
@@ -33,11 +36,26 @@ public class LoginService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.certificateUtils = certificateUtils;
+        this.emailValidator = EmailValidator.getInstance();
     }
 
     public void registerUser(User user) {
-        boolean isUserExisting = userRepository.existsByEmail(user.getEmail());
-        if (!isUserExisting) {
+        if (!emailValidator.isValid(user.getEmail())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST,
+                    TextConstants.INVALID_EMAIL);
+        }
+
+        if (user.getAge() < 0 || user.getAge() > 130) {
+            throw new CustomException(HttpStatus.BAD_REQUEST,
+                    TextConstants.AGE_NOT_APPROPRIATE);
+        }
+
+        if (!userRepository.existsByEmail(user.getEmail())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST,
+                    TextConstants.EMAIL_ALREADY_IN_USE);
+        }
+
+        if (!userRepository.existsByEmail(user.getEmail())) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
             UserRole userRole = new UserRole();
@@ -75,7 +93,7 @@ public class LoginService {
         Optional<String> jwtToken = certificateUtils.createJWTToken(userFromDatabase);
         if (jwtToken.isEmpty()) {
             throw new CustomException(HttpStatus.UNAUTHORIZED,
-                    "Can not login. Please contact us at tristan.ruecker@gmail.com");
+                    TextConstants.CANT_OBTAIN_JWT_TOKEN);
         }
 
         UserLoggedInResponse userLoggedInResponse = new UserLoggedInResponse();
@@ -85,7 +103,7 @@ public class LoginService {
 
 
     private void throwWrongEmailOrPasswordException() {
-        throw new CustomException(HttpStatus.UNAUTHORIZED, "Sorry, wrong email or wrong password");
+        throw new CustomException(HttpStatus.UNAUTHORIZED, TextConstants.WRONG_EMAIL_OR_PASSWORD);
     }
 
 }
