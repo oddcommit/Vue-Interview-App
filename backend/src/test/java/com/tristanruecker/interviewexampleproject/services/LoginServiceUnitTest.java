@@ -21,9 +21,9 @@ public class LoginServiceUnitTest extends UnitTestBaseClass {
 
     @BeforeEach
     void mockBeforeTest(@Mock UserRepository userRepository,
-                       @Mock BCryptPasswordEncoder bCryptPasswordEncoder,
-                       @Mock CertificateUtils certificateUtils,
-                       @Mock JwtUtils jwtUtils) {
+                        @Mock BCryptPasswordEncoder bCryptPasswordEncoder,
+                        @Mock CertificateUtils certificateUtils,
+                        @Mock JwtUtils jwtUtils) {
         loginService = new LoginService(certificateUtils, bCryptPasswordEncoder, userRepository, jwtUtils);
     }
 

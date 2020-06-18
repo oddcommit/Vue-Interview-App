@@ -2,16 +2,19 @@ package com.tristanruecker.interviewexampleproject.base;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IntegrationTestBaseClass {
 
     @LocalServerPort
-    protected int randomServerPort;
+    protected Integer randomServerPort;
 
     protected <T> T createRetrofitClient(Class<T> className) {
         Retrofit retrofit = createRetrofitClient(new OkHttpClient.Builder());
