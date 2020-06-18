@@ -1,23 +1,23 @@
 nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    border-bottom: 1px solid black;
-    margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid black;
+  margin-bottom: 40px;
 }
 
 .nav-link {
+  height: 100%;
+  a {
     height: 100%;
-    a {
-        height: 100%;
-        float: right;
-        display: flex;
-        align-items: center;
-    }
+    float: right;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .container-home {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }

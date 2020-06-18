@@ -14,7 +14,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import axiosHttp from './Axios';
 import { createBrowserHistory } from 'history';
 
-
 let allReducers = combineReducers({
   jwtTokenReducer: tokenReducer,
   mainReducer: mainReducer,
@@ -24,28 +23,28 @@ const store = createStore(allReducers);
 let history = createBrowserHistory();
 
 class App extends Component {
-
   state = {
     isLoading: true,
-    componentDidUpdateFromRefreshToken: false
-  }
+    componentDidUpdateFromRefreshToken: false,
+  };
 
   componentDidMount() {
     let jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
       axiosHttp
-        .post("/renewToken", { skipAuthRefresh: true })
-        .then(tokenRefreshResponse => {
+        .post('/renewToken', { skipAuthRefresh: true })
+        .then((tokenRefreshResponse) => {
           let jwtToken = tokenRefreshResponse.data.jwtToken;
-          axiosHttp.defaults.headers.common =
-            { 'Authorization': `Bearer ${jwtToken}` }
-          this.setState(
-            {
-              isLoading: false,
-              componentDidUpdateFromRefreshToken: true
-            });
+          axiosHttp.defaults.headers.common = {
+            Authorization: `Bearer ${jwtToken}`,
+          };
+          this.setState({
+            isLoading: false,
+            componentDidUpdateFromRefreshToken: true,
+          });
           return Promise.resolve();
-        }).catch(error => {
+        })
+        .catch((error) => {
           localStorage.removeItem('jwtToken');
           delete axiosHttp.defaults.headers.common['Authorization'];
           history.push('/');
@@ -57,15 +56,12 @@ class App extends Component {
     }
   }
 
-
-
   componentDidUpdate() {
     if (this.state.componentDidUpdateFromRefreshToken) {
       this.setState({ componentDidUpdateFromRefreshToken: false });
       history.push('/home');
     }
   }
-
 
   render() {
     if (this.state.isLoading) {
@@ -80,8 +76,8 @@ class App extends Component {
         <Provider store={store}>
           <Router history={history}>
             <Switch>
-              <Route exact path='/' component={Login} />
-              <Route exact path='/home' component={Home} />
+              <Route exact path="/" component={Login} />
+              <Route exact path="/home" component={Home} />
             </Switch>
           </Router>
         </Provider>
