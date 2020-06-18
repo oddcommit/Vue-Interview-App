@@ -31,19 +31,19 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Instantiate the interceptor (you can chain it as it returns the axios instance)
     let jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
-      axiosHttp.post('/renewToken')
+      axiosHttp
+        .post('/renewToken', { skipAuthRefresh: true })
         .then(tokenRefreshResponse => {
           let jwtToken = tokenRefreshResponse.data.jwtToken;
           axiosHttp.defaults.headers.common = { 'Authorization': `Bearer ${jwtToken}` }
           this.setState({ isLoading: false, componentDidUpdateFromRefreshToken: true });
-          debugger;
           return Promise.resolve();
         }).catch(error => {
           localStorage.removeItem('jwtToken');
           delete axiosHttp.defaults.headers.common["Authorization"];
+          history.push('/');
           this.setState({ isLoading: false });
           return Promise.reject(error);
         });
@@ -58,7 +58,6 @@ class App extends Component {
     if (this.state.componentDidUpdateFromRefreshToken) {
       this.setState({ componentDidUpdateFromRefreshToken: false });
       history.push('/home');
-
     }
   }
 

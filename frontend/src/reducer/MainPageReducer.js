@@ -11,7 +11,7 @@ const mainReducer = (state = initalState, action) => {
     case mainPageConstants.SET_USERS:
       return {
         ...state,
-        users: action.payload.users,
+        users: action.payload,
       };
     default:
       return state;
