@@ -51,7 +51,7 @@ public class CertificateUtils {
             String userEmail = user.getEmail();
 
             Instant instant = Instant.now();
-            Instant expirationInstant = instant.plus(tokenLifetimeInDays, ChronoUnit.SECONDS);
+            Instant expirationInstant = instant.plus(tokenLifetimeInDays, ChronoUnit.DAYS);
 
 
             JwtBuilder builder = Jwts.builder()

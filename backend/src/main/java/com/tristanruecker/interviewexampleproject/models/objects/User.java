@@ -39,7 +39,6 @@ public class User extends UserEmailAndPassword {
     @Column(name = "id")
     @JsonProperty("id")
     @ApiModelProperty(hidden = true)
-    @JsonIgnore
     private Long id;
 
     @Column(name = "name")

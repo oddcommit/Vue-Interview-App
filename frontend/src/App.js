@@ -34,15 +34,20 @@ class App extends Component {
     let jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
       axiosHttp
-        .post('/renewToken', { skipAuthRefresh: true })
+        .post("/renewToken", { skipAuthRefresh: true })
         .then(tokenRefreshResponse => {
           let jwtToken = tokenRefreshResponse.data.jwtToken;
-          axiosHttp.defaults.headers.common = { 'Authorization': `Bearer ${jwtToken}` }
-          this.setState({ isLoading: false, componentDidUpdateFromRefreshToken: true });
+          axiosHttp.defaults.headers.common =
+            { 'Authorization': `Bearer ${jwtToken}` }
+          this.setState(
+            {
+              isLoading: false,
+              componentDidUpdateFromRefreshToken: true
+            });
           return Promise.resolve();
         }).catch(error => {
           localStorage.removeItem('jwtToken');
-          delete axiosHttp.defaults.headers.common["Authorization"];
+          delete axiosHttp.defaults.headers.common['Authorization'];
           history.push('/');
           this.setState({ isLoading: false });
           return Promise.reject(error);
