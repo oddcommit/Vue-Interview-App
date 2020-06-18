@@ -1,5 +1,7 @@
 package com.tristanruecker.interviewexampleproject.services;
 
+import com.tristanruecker.interviewexampleproject.config.authentication.JWTParseResultObject;
+import com.tristanruecker.interviewexampleproject.config.authentication.type.JWTParseResult;
 import com.tristanruecker.interviewexampleproject.config.exception.CustomException;
 import com.tristanruecker.interviewexampleproject.models.objects.User;
 import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
@@ -8,14 +10,17 @@ import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import com.tristanruecker.interviewexampleproject.utils.TextConstants;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -28,15 +33,18 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final EmailValidator emailValidator;
+    private final JwtUtils jwtUtils;
 
     @Autowired
     public LoginService(CertificateUtils certificateUtils,
                         BCryptPasswordEncoder bCryptPasswordEncoder,
-                        UserRepository userRepository) {
+                        UserRepository userRepository,
+                        JwtUtils jwtUtils) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.certificateUtils = certificateUtils;
         this.emailValidator = EmailValidator.getInstance();
+        this.jwtUtils = jwtUtils;
     }
 
     public void registerUser(User user) {
@@ -99,6 +107,32 @@ public class LoginService {
         UserLoggedInResponse userLoggedInResponse = new UserLoggedInResponse();
         userLoggedInResponse.setJwtToken(jwtToken.get());
         return userLoggedInResponse;
+    }
+
+
+    public UserLoggedInResponse regenerateTokenOnExpire(String authorizationHeader, Principal principal) {
+        JWTParseResultObject jwtParseResultObject = jwtUtils.getAuthentication(authorizationHeader);
+
+        if (jwtParseResultObject.getJwtParseResult() != JWTParseResult.FAILED) {
+            String userEmail = jwtParseResultObject
+                    .getUsernamePasswordAuthenticationToken()
+                    .getPrincipal()
+                    .toString();
+            if (StringUtils.isEmpty(userEmail)) {
+                throw new CustomException(HttpStatus.UNAUTHORIZED, TextConstants.RENEW_TOKEN_USER_NOT_FOUND);
+            }
+            Optional<User> user = userRepository.
+                    findByEmail(userEmail);
+            if (user.isEmpty()) {
+                throw new CustomException(HttpStatus.UNAUTHORIZED, TextConstants.RENEW_TOKEN_USER_NOT_FOUND);
+            }
+
+            UserLoggedInResponse userLoggedInResponse = new UserLoggedInResponse();
+            userLoggedInResponse.setJwtToken(certificateUtils.createJWTToken(user.get()).get());
+            return userLoggedInResponse;
+        } else {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, TextConstants.CANT_REGENERATE_TOKEN);
+        }
     }
 
 

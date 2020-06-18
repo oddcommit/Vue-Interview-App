@@ -3,6 +3,7 @@ package com.tristanruecker.interviewexampleproject.config.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CertificateUtils certificateUtils;
 
     @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Override
@@ -38,7 +42,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").hasAuthority(Roles.USER.toString())
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(), certificateUtils, objectMapper))
+                .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(),
+                        certificateUtils,
+                        objectMapper,
+                        jwtUtils))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

@@ -5,6 +5,7 @@ import com.tristanruecker.interviewexampleproject.config.exception.CustomExcepti
 import com.tristanruecker.interviewexampleproject.models.objects.User;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import com.tristanruecker.interviewexampleproject.utils.TextConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,11 @@ public class LoginServiceUnitTest extends UnitTestBaseClass {
     private LoginService loginService;
 
     @BeforeEach
-    void mockBeoreTest(@Mock UserRepository userRepository,
+    void mockBeforeTest(@Mock UserRepository userRepository,
                        @Mock BCryptPasswordEncoder bCryptPasswordEncoder,
-                       @Mock CertificateUtils certificateUtils) {
-        loginService = new LoginService(certificateUtils, bCryptPasswordEncoder, userRepository);
+                       @Mock CertificateUtils certificateUtils,
+                       @Mock JwtUtils jwtUtils) {
+        loginService = new LoginService(certificateUtils, bCryptPasswordEncoder, userRepository, jwtUtils);
     }
 
 

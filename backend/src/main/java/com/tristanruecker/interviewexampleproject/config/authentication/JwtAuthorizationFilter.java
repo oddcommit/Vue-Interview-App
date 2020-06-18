@@ -3,6 +3,7 @@ package com.tristanruecker.interviewexampleproject.config.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tristanruecker.interviewexampleproject.config.authentication.type.JWTParseResult;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -34,14 +35,17 @@ import java.util.Optional;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final CertificateUtils certificateUtils;
+    private final JwtUtils jwtUtils;
     private final ObjectMapper objectMapper;
 
     JwtAuthorizationFilter(AuthenticationManager authenticationManager,
                            CertificateUtils certificateUtils,
-                           ObjectMapper objectMapper) {
+                           ObjectMapper objectMapper,
+                           JwtUtils jwtUtils) {
         super(authenticationManager);
         this.certificateUtils = certificateUtils;
         this.objectMapper = objectMapper;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -54,7 +58,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        JWTParseResultObject jwtParseResultObject = getAuthentication(tokenHeader);
+        if (request.getRequestURI().equals("/api/renewToken")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        JWTParseResultObject jwtParseResultObject = jwtUtils.getAuthentication(tokenHeader);
 
         switch (jwtParseResultObject.getJwtParseResult()) {
             case SUCCESS:
@@ -80,36 +89,5 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private boolean isAuthorizationHeaderAndTokenVisible(String authorizationHeader) {
         return Strings.isNotEmpty(authorizationHeader) && authorizationHeader.startsWith("Bearer ");
-    }
-
-
-    private JWTParseResultObject getAuthentication(String authorizationHeader) {
-        JWTParseResultObject jwtParseResultObject = new JWTParseResultObject();
-        Optional<PublicKey> publicKeyOptional = certificateUtils.readPublicKey();
-
-        if (publicKeyOptional.isPresent()) {
-            try {
-                Jws<Claims> jwsClaims = Jwts.parser()
-                        .setSigningKey(publicKeyOptional.get())
-                        .parseClaimsJws(authorizationHeader.trim().substring(7));
-                Claims claims = jwsClaims.getBody();
-                String email = claims.get("sub", String.class);
-                List<String> userRoles = claims.get("roles", List.class);
-                List<GrantedAuthority> grantedAuths = AuthorityUtils.createAuthorityList(String.join(",", userRoles));
-
-                jwtParseResultObject.setJwtParseResult(JWTParseResult.SUCCESS);
-                jwtParseResultObject.setUsernamePasswordAuthenticationToken(new UsernamePasswordAuthenticationToken(email, null, grantedAuths));
-                return jwtParseResultObject;
-            } catch (ExpiredJwtException e) {
-                jwtParseResultObject.setJwtParseResult(JWTParseResult.EXPIRED);
-                return jwtParseResultObject;
-            } catch (JwtException e) {
-                jwtParseResultObject.setJwtParseResult(JWTParseResult.FAILED);
-                return jwtParseResultObject;
-            }
-        }
-
-        jwtParseResultObject.setJwtParseResult(JWTParseResult.FAILED);
-        return jwtParseResultObject;
     }
 }

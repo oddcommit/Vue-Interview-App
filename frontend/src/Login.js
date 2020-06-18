@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axiosHttp from './Axios';
 import './Login.scss';
 import { Button, Form, Alert } from 'react-bootstrap';
-// import { useHistory } from "react-router-dom";
 
 class Login extends Component {
-    // handleClick = e => {
-    //     this.props.history.push("/home");
-    // };
-
-
     state = {
         email: '',
         password: '',
@@ -21,11 +15,14 @@ class Login extends Component {
         this.setState({ isLoginError: false });
 
         let context = this;
-        axios.post('/login', {
+        axiosHttp.post('/login', {
             email: this.state.email,
             password: this.state.password
-        })
-            .then(res => {
+        }, { skipAuthRefresh: true })
+            .then(response => {
+                let jwtToken = response.data.jwtToken;
+                localStorage.setItem('jwtToken', jwtToken);
+                axiosHttp.defaults.headers.common = { 'Authorization': `Bearer ${jwtToken}` }
                 history.push('/home');
             })
             .catch(function (error) {
@@ -43,17 +40,21 @@ class Login extends Component {
 
     render() {
         const { history } = this.props;
+        let usernameOrPasswordIncorrectAlert;
+        if (this.state.errorMessage) {
+            usernameOrPasswordIncorrectAlert =
+                <Alert className="username-password-incorrect" variant="danger">
+                    {this.state.errorMessage}
+                </Alert>;
+        }
+
         return (
             <div className="container-centered">
                 <div className="card-style-container">
                     <h2>Login</h2>
                     <Form.Control id="email" onChange={this.updateStateEmail} aria-describedby="email" type="email" placeholder="Enter email" />
                     <Form.Control id="password" onChange={this.updateStatePassword} aria-describedby="email" type="password" placeholder="Enter password" />
-                    {this.state.errorMessage ?
-                        <Alert className="username-password-incorrect" variant="danger">
-                            {this.state.errorMessage}
-                        </Alert> : null}
-
+                    {usernameOrPasswordIncorrectAlert}
                     <Button variant="primary" onClick={() => this.loginClicked(history)}>Login</Button>
                 </div>
             </div>

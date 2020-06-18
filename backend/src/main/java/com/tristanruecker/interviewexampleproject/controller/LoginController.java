@@ -1,5 +1,6 @@
 package com.tristanruecker.interviewexampleproject.controller;
 
+import com.tristanruecker.interviewexampleproject.config.authentication.JWTParseResultObject;
 import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
 import com.tristanruecker.interviewexampleproject.models.objects.User;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
@@ -8,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.security.Principal;
 
 @RequestMappingApi
 public class LoginController {
@@ -35,8 +39,9 @@ public class LoginController {
      * https://stackoverflow.com/questions/35791465/is-there-a-way-to-parse-claims-from-an-expired-jwt-token
      * TODO: Get new authentication token BUT NOT HERE old ist "just" expired
      */
-    public void regenerateTokenOnExpire() {
-
+    @PostMapping(value = "/renewToken")
+    public UserLoggedInResponse regenerateTokenOnExpire(@RequestHeader("Authorization") String authorizationHeader, Principal principal) {
+        return loginService.regenerateTokenOnExpire(authorizationHeader, principal);
     }
 
 }
