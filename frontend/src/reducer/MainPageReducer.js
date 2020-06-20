@@ -8,6 +8,7 @@ const initalState = {
 
 const mainReducer = (state = initalState, action) => {
   switch (action.type) {
+    
     case mainPageConstants.SET_USERS:
       return {
         ...state,

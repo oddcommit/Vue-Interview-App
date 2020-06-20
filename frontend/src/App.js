@@ -13,6 +13,7 @@ import { mainReducer } from './reducer/MainPageReducer';
 import Spinner from 'react-bootstrap/Spinner';
 import axiosHttp from './Axios';
 import { createBrowserHistory } from 'history';
+import { setToken, delteToken } from './tokenUtils';
 
 let allReducers = combineReducers({
   jwtTokenReducer: tokenReducer,
@@ -34,10 +35,7 @@ class App extends Component {
       axiosHttp
         .post('/renewToken', { skipAuthRefresh: true })
         .then((tokenRefreshResponse) => {
-          let jwtToken = tokenRefreshResponse.data.jwtToken;
-          axiosHttp.defaults.headers.common = {
-            Authorization: `Bearer ${jwtToken}`,
-          };
+          setToken(tokenRefreshResponse.data.jwtToken);
           this.setState({
             isLoading: false,
             componentDidUpdateFromRefreshToken: true,
@@ -45,8 +43,7 @@ class App extends Component {
           return Promise.resolve();
         })
         .catch((error) => {
-          localStorage.removeItem('jwtToken');
-          delete axiosHttp.defaults.headers.common['Authorization'];
+          delteToken();
           history.push('/');
           this.setState({ isLoading: false });
           return Promise.reject(error);
