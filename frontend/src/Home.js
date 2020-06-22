@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import axiosHttp from './utils/axios';
 import { mainPageConstants } from './reducer/MainPageReducer';
+import { logoutUser } from './utils/loginUtils';
 
 import './Main.scss';
 import './Home.scss';
@@ -20,8 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 class Home extends Component {
   logout = () => {
-    localStorage.removeItem('jwtToken');
-    delete axiosHttp.defaults.headers.common['Authorization'];
+    logoutUser();
   };
 
   render() {
@@ -35,6 +35,23 @@ class Home extends Component {
           </div>
         </nav>
         <div className="centered-container-base">
+          <div
+            onClick={() => {
+              let context = this;
+              axiosHttp
+                .get('/users')
+                .then((response) => {
+                  debugger;
+                  this.props.setUsers(response.data);
+                })
+                .catch(function (error) {
+                  debugger;
+                  context.setState({ errorMessage: error.message });
+                });
+            }}
+          >
+            Click me!
+          </div>
           <h1>User overview</h1>
           <div>
             <Table responsive>

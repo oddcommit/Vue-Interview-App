@@ -1,37 +1,23 @@
 import React, { Component } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner';
+
 import Login from './Login';
 import Home from './Home';
-import './App.scss';
 
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { combineReducers } from 'redux';
-
-import { tokenReducer } from './reducer/TokenReducer';
-import { mainReducer } from './reducer/MainPageReducer';
-import Spinner from 'react-bootstrap/Spinner';
 import axiosHttp from './utils/axios';
-import { createBrowserHistory } from 'history';
-import { setToken, delteToken } from './utils/tokenUtils';
+import { history } from './utils/history';
+import { loginUser, logoutUser } from './utils/loginUtils';
 
-let allReducers = combineReducers({
-  jwtTokenReducer: tokenReducer,
-  mainReducer: mainReducer,
-});
-
-const store = createStore(allReducers);
-let history = createBrowserHistory();
+import './App.scss';
 
 class App extends Component {
   state = {
     isLoading: true,
-    componentDidUpdateFromRefreshToken: false,
   };
 
   deleteTokenAndPushToLogin() {
-    delteToken();
-    history.push('/');
+    logoutUser();
     this.setState({ isLoading: false });
   }
 
@@ -41,10 +27,9 @@ class App extends Component {
       axiosHttp
         .post('/renewToken', { skipAuthRefresh: true })
         .then((tokenRefreshResponse) => {
-          setToken(tokenRefreshResponse.data.jwtToken);
+          loginUser(tokenRefreshResponse.data.jwtToken);
           this.setState({
             isLoading: false,
-            componentDidUpdateFromRefreshToken: true,
           });
         })
         .catch((error) => {
@@ -55,33 +40,22 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.state.componentDidUpdateFromRefreshToken) {
-      this.setState({ componentDidUpdateFromRefreshToken: false });
-      history.push('/home');
-    }
-  }
-
   render() {
-    if (this.state.isLoading) {
-      return (
-        <div className="loading-screen">
-          <Spinner animation="grow" />
-          <div>Loading...</div>
-        </div>
-      );
-    } else {
-      return (
-        <Provider store={store}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/" component={Login} />
-              <Route exact path="/home" component={Home} />
-            </Switch>
-          </Router>
-        </Provider>
-      );
-    }
+    return (
+      <Router history={history}>
+        {this.state.isLoading ? (
+          <div className="loading-screen">
+            <Spinner animation="grow" />
+            <div>Loading...</div>
+          </div>
+        ) : (
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/home" component={Home} />
+          </Switch>
+        )}
+      </Router>
+    );
   }
 }
 

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axiosHttp from './utils/axios';
 import './Login.scss';
 import { Button, Form, Alert } from 'react-bootstrap';
-import { setToken, delteToken } from './utils/tokenUtils';
+import { loginUser, logoutUser } from './utils/loginUtils';
+import { history } from './utils/history';
 
 class Login extends Component {
   state = {
@@ -12,7 +13,7 @@ class Login extends Component {
     isLoginError: false,
   };
 
-  loginClicked(history) {
+  loginClicked() {
     this.setState({ isLoginError: false });
 
     let context = this;
@@ -27,11 +28,10 @@ class Login extends Component {
       )
       .then((response) => {
         let jwtToken = response.data.jwtToken;
-        setToken(jwtToken);
-        history.push('/home');
+        loginUser(jwtToken);
       })
       .catch(function (error) {
-        delteToken();
+        logoutUser();
         context.setState({ errorMessage: error.response.data.errorMessage });
       });
   }
@@ -77,7 +77,7 @@ class Login extends Component {
           <Button
             id="login-button"
             variant="primary"
-            onClick={() => this.loginClicked(history)}
+            onClick={() => this.loginClicked()}
           >
             Login
           </Button>

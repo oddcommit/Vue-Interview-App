@@ -1,24 +1,24 @@
-import { setToken, delteToken } from './tokenUtils';
+import { loginUser, logoutUser } from './loginUtils';
 import axiosHttp from './axios';
 import MockAdapter from 'axios-mock-adapter';
 
 describe('test axiosRefreshLogic', () => {
-  it('should put token into local storage and set authorization header', async () => {
+  it('should try to renew token', async () => {
     global.localStorage = new LocalStorageMock();
-    let axios = axiosHttp;
-    let mock = new MockAdapter(axios);
+    let mock = new MockAdapter(axiosHttp);
 
-    let spy = jest.spyOn(axios, 'post');
-    mock.onPost('/something').replyOnce(401);
+    let axiosSpy = jest.spyOn(axiosHttp, 'post');
+    mock.onPost('/something').replyOnce(401).onGet('/something').replyOnce(200);
     mock.onPost('/renewToken').reply(200, {
       jwtToken: 'something',
     });
-    await axios
-      .post('/something')
-      .then((response) => {})
-      .catch((error) => {});
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    await axiosHttp
+      .post('/something', { skipAuthRefresh: true })
+      .then((response) => {})
+      .catch(function (error) {});
+
+    expect(axiosSpy).toHaveBeenCalledTimes(2);
   });
 });
 

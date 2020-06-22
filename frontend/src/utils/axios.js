@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import { setToken, delteToken } from './tokenUtils';
+import { loginUser, logoutUser } from './loginUtils';
 
 let createAxios = () => {
   let jwtToken = localStorage.getItem('jwtToken');
@@ -19,11 +19,15 @@ const refreshAuthLogic = (failedRequest) => {
   return axiosHttp
     .post('/renewToken')
     .then((tokenRefreshResponse) => {
-      setToken(tokenRefreshResponse.data.jwtToken);
+      failedRequest.response.config.headers['Authorization'] =
+        'Bearer ' + tokenRefreshResponse.data.jwtToken;
+      loginUser(tokenRefreshResponse.data.jwtToken);
+      debugger;
       return Promise.resolve();
     })
     .catch((error) => {
-      delteToken();
+      debugger;
+      logoutUser();
       return Promise.reject(error);
     });
 };

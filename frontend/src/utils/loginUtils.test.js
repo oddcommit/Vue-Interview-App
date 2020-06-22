@@ -1,4 +1,4 @@
-import { setToken, delteToken } from './tokenUtils';
+import { loginUser, logoutUser } from './loginUtils';
 import axiosHttp from './axios';
 
 describe('test localstorage and authorization header', () => {
@@ -9,12 +9,10 @@ describe('test localstorage and authorization header', () => {
     let token = 'something';
 
     //when
-    setToken(token);
+    loginUser(token);
 
     //then
-    expect(axiosHttp.defaults.headers.common['Authorization']).toBe(
-      `Bearer ${token}`
-    );
+    expect(axiosHttp.defaults.headers['Authorization']).toBe(`Bearer ${token}`);
     expect(localstorage.getItem('jwtToken')).toBe(token);
   });
 
@@ -22,19 +20,18 @@ describe('test localstorage and authorization header', () => {
     //given
     global.localStorage = new LocalStorageMock();
     let localstorage = global.localStorage;
-    axiosHttp.defaults.headers.common = {
+    axiosHttp.defaults.headers = {
       Authorization: `Bearer test`,
     };
     localstorage.setItem('jwtToken', 'something');
 
     //when
-    delteToken();
+    logoutUser();
 
     //then
-    let authorizationHeader =
-      axiosHttp.defaults.headers.common['Authorization'];
+    let authorizationHeader = axiosHttp.defaults.headers['Authorization'];
     expect(authorizationHeader).toBe(undefined);
-    // global.localStorage.getItem('jwtToken').toBe(undefined);
+    expect(global.localStorage.getItem('jwtToken')).toBe(null);
   });
 });
 
