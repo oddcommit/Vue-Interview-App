@@ -2,24 +2,24 @@ import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { setToken, delteToken } from './tokenUtils';
 
-let jwtToken = localStorage.getItem('jwtToken');
+let createAxios = () => {
+  let jwtToken = localStorage.getItem('jwtToken');
+  return axios.create({
+    baseURL: 'http://localhost:4667/api', //TODO: Replace this with environment variable
+    headers: {
+      ...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
+      'content-type': 'application/json',
+    },
+  });
+};
 
-const axiosHttp = axios.create({
-  baseURL: 'http://localhost:4667/api',
-  headers: {
-    ...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
-    'content-type': 'application/json',
-  },
-});
+let axiosHttp = createAxios();
 
 const refreshAuthLogic = (failedRequest) => {
   return axiosHttp
     .post('/renewToken')
     .then((tokenRefreshResponse) => {
       setToken(tokenRefreshResponse.data.jwtToken);
-      failedRequest.response.config.headers[
-        'Authorization'
-      ] = `Bearer ${jwtToken}`;
       return Promise.resolve();
     })
     .catch((error) => {
@@ -27,6 +27,7 @@ const refreshAuthLogic = (failedRequest) => {
       return Promise.reject(error);
     });
 };
+
 createAuthRefreshInterceptor(axiosHttp, refreshAuthLogic);
 
 export default axiosHttp;

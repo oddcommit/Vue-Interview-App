@@ -1,7 +1,9 @@
-import axiosHttp from './Axios';
+import axiosHttp from './axios';
 
 const setToken = (jwtToken) => {
-  axiosHttp.defaults.headers.common = {
+  let axiosHeaders = axiosHttp.defaults.headers;
+  axiosHttp.defaults.headers = {
+    ...axiosHeaders,
     Authorization: `Bearer ${jwtToken}`,
   };
   localStorage.setItem('jwtToken', jwtToken);
@@ -9,7 +11,7 @@ const setToken = (jwtToken) => {
 
 const delteToken = () => {
   localStorage.removeItem('jwtToken');
-  delete axiosHttp.defaults.headers.common['Authorization'];
+  delete axiosHttp.defaults.headers['Authorization'];
 };
 
 export { setToken, delteToken };

@@ -11,9 +11,9 @@ import { combineReducers } from 'redux';
 import { tokenReducer } from './reducer/TokenReducer';
 import { mainReducer } from './reducer/MainPageReducer';
 import Spinner from 'react-bootstrap/Spinner';
-import axiosHttp from './Axios';
+import axiosHttp from './utils/axios';
 import { createBrowserHistory } from 'history';
-import { setToken, delteToken } from './tokenUtils';
+import { setToken, delteToken } from './utils/tokenUtils';
 
 let allReducers = combineReducers({
   jwtTokenReducer: tokenReducer,
@@ -29,6 +29,12 @@ class App extends Component {
     componentDidUpdateFromRefreshToken: false,
   };
 
+  deleteTokenAndPushToLogin() {
+    delteToken();
+    history.push('/');
+    this.setState({ isLoading: false });
+  }
+
   componentDidMount() {
     let jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
@@ -40,16 +46,12 @@ class App extends Component {
             isLoading: false,
             componentDidUpdateFromRefreshToken: true,
           });
-          return Promise.resolve();
         })
         .catch((error) => {
-          delteToken();
-          history.push('/');
-          this.setState({ isLoading: false });
-          return Promise.reject(error);
+          this.deleteTokenAndPushToLogin();
         });
     } else {
-      this.setState({ isLoading: false });
+      this.deleteTokenAndPushToLogin();
     }
   }
 

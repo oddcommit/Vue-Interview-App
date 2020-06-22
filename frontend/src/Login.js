@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import axiosHttp from './Axios';
+import axiosHttp from './utils/axios';
 import './Login.scss';
 import { Button, Form, Alert } from 'react-bootstrap';
+import { setToken, delteToken } from './utils/tokenUtils';
 
 class Login extends Component {
   state = {
@@ -26,13 +27,11 @@ class Login extends Component {
       )
       .then((response) => {
         let jwtToken = response.data.jwtToken;
-        localStorage.setItem('jwtToken', jwtToken);
-        axiosHttp.defaults.headers.common = {
-          Authorization: `Bearer ${jwtToken}`,
-        };
+        setToken(jwtToken);
         history.push('/home');
       })
       .catch(function (error) {
+        delteToken();
         context.setState({ errorMessage: error.response.data.errorMessage });
       });
   }
@@ -70,12 +69,16 @@ class Login extends Component {
           <Form.Control
             id="password"
             onChange={this.updateStatePassword}
-            aria-describedby="email"
+            aria-describedby="password"
             type="password"
             placeholder="Enter password"
           />
           {usernameOrPasswordIncorrectAlert}
-          <Button variant="primary" onClick={() => this.loginClicked(history)}>
+          <Button
+            id="login-button"
+            variant="primary"
+            onClick={() => this.loginClicked(history)}
+          >
             Login
           </Button>
         </div>

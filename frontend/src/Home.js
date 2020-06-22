@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import axiosHttp from './Axios';
-import { mainPageConstants } from './reducer/MainPageReducer';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
+import axiosHttp from './utils/axios';
+import { mainPageConstants } from './reducer/MainPageReducer';
 
 import './Main.scss';
 import './Home.scss';
