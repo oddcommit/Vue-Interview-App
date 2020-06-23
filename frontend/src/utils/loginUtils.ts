@@ -1,9 +1,8 @@
 import axiosHttp from './axios';
 import { history } from './history';
 
-const loginUser = (jwtToken) => {
-  let axiosHeaders = axiosHttp.defaults.headers;
-  delete axiosHttp.defaults.headers['Authorization'];
+const loginUser = (jwtToken: string) => {
+  let axiosHeaders: any = axiosHttp.defaults.headers;
 
   axiosHttp.defaults.headers = {
     ...axiosHeaders,
