@@ -1,32 +1,37 @@
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { loginUser, logoutUser } from './loginUtils';
 
+interface TokenRefreshResponse {
+  jwtToken: string;
+}
+
 let createAxios = () => {
-  let jwtToken = localStorage.getItem('jwtToken');
-  return axios.create({
-    baseURL: 'http://localhost:4667/api', //TODO: Replace this with environment variable
+  let jwtToken: string | null = localStorage.getItem('jwtToken');
+
+  let axiosRequestConfig: AxiosRequestConfig = {
+    baseURL: 'http://localhost:4667/api',
+    //TODO: Replace this with environment variable
     headers: {
       ...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
       'content-type': 'application/json',
     },
-  });
+  };
+  return axios.create(axiosRequestConfig);
 };
 
-let axiosHttp = createAxios();
+let axiosHttp: AxiosInstance = createAxios();
 
-const refreshAuthLogic = (failedRequest) => {
+const refreshAuthLogic = (failedRequest: any) => {
   return axiosHttp
     .post('/renewToken')
-    .then((tokenRefreshResponse) => {
+    .then((tokenRefreshResponse: AxiosResponse<TokenRefreshResponse>) => {
       failedRequest.response.config.headers['Authorization'] =
         'Bearer ' + tokenRefreshResponse.data.jwtToken;
       loginUser(tokenRefreshResponse.data.jwtToken);
-      debugger;
       return Promise.resolve();
     })
-    .catch((error) => {
-      debugger;
+    .catch((error: any) => {
       logoutUser();
       return Promise.reject(error);
     });
