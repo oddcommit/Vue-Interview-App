@@ -23,7 +23,7 @@ public class JwtUtils {
     @Autowired
     CertificateUtils certificateUtils;
 
-    public JWTParseResultObject getAuthentication(String authorizationHeader) {
+    public JWTParseResultObject parseAuthentication(String authorizationHeader) {
         Optional<PublicKey> publicKeyOptional = certificateUtils.readPublicKey();
 
         if (publicKeyOptional.isPresent()) {

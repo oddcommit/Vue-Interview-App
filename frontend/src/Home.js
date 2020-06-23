@@ -37,16 +37,13 @@ class Home extends Component {
         <div className="centered-container-base">
           <div
             onClick={() => {
-              let context = this;
               axiosHttp
                 .get('/users')
                 .then((response) => {
-                  debugger;
                   this.props.setUsers(response.data);
                 })
-                .catch(function (error) {
-                  debugger;
-                  context.setState({ errorMessage: error.message });
+                .catch((error) => {
+                  this.setState({ errorMessage: error.message });
                 });
             }}
           >
@@ -85,7 +82,7 @@ class Home extends Component {
     axiosHttp
       .get('/users')
       .then((response) => {
-        this.props.setUsers(response.data);
+        context.props.setUsers(response.data);
       })
       .catch(function (error) {
         context.setState({ errorMessage: error.message });

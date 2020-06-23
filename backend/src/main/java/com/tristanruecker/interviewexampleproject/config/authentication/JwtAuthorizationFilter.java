@@ -1,20 +1,11 @@
 package com.tristanruecker.interviewexampleproject.config.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tristanruecker.interviewexampleproject.config.authentication.type.JWTParseResult;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -23,9 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.PublicKey;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * If JWT token is expired then it returns status code 401
@@ -63,7 +51,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        JWTParseResultObject jwtParseResultObject = jwtUtils.getAuthentication(tokenHeader);
+        JWTParseResultObject jwtParseResultObject = jwtUtils.parseAuthentication(tokenHeader);
 
         switch (jwtParseResultObject.getJwtParseResult()) {
             case SUCCESS:

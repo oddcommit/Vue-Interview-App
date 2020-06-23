@@ -111,7 +111,7 @@ public class LoginService {
 
 
     public UserLoggedInResponse regenerateTokenOnExpire(String authorizationHeader, Principal principal) {
-        JWTParseResultObject jwtParseResultObject = jwtUtils.getAuthentication(authorizationHeader);
+        JWTParseResultObject jwtParseResultObject = jwtUtils.parseAuthentication(authorizationHeader);
 
         if (jwtParseResultObject.getJwtParseResult() != JWTParseResult.FAILED) {
             String userEmail = jwtParseResultObject

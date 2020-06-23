@@ -3,7 +3,6 @@ import axiosHttp from './utils/axios';
 import './Login.scss';
 import { Button, Form, Alert } from 'react-bootstrap';
 import { loginUser, logoutUser } from './utils/loginUtils';
-import { history } from './utils/history';
 
 class Login extends Component {
   state = {
@@ -16,7 +15,6 @@ class Login extends Component {
   loginClicked() {
     this.setState({ isLoginError: false });
 
-    let context = this;
     axiosHttp
       .post(
         '/login',
@@ -30,9 +28,9 @@ class Login extends Component {
         let jwtToken = response.data.jwtToken;
         loginUser(jwtToken);
       })
-      .catch(function (error) {
+      .catch((error) => {
         logoutUser();
-        context.setState({ errorMessage: error.response.data.errorMessage });
+        this.setState({ errorMessage: error.response.data.errorMessage });
       });
   }
 
@@ -45,7 +43,6 @@ class Login extends Component {
   };
 
   render() {
-    const { history } = this.props;
     let usernameOrPasswordIncorrectAlert;
     if (this.state.errorMessage) {
       usernameOrPasswordIncorrectAlert = (
