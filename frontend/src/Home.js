@@ -67,7 +67,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    debugger;
     axiosHttp
       .get('/users')
       .then((response) => {
