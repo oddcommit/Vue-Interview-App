@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 import axiosHttp from './utils/axios';
 import { mainPageConstants } from './reducer/MainPageReducer';
-import { logoutUser } from './utils/loginUtils';
+import Navbar from './components/Navbar';
 
 import './Main.scss';
 import './Home.scss';
@@ -20,20 +19,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class Home extends Component {
-  logout = () => {
-    logoutUser();
-  };
-
   render() {
     return (
       <div className="container-home">
-        <nav>
-          <div className="nav-link">
-            <Link to="/" onClick={() => this.logout()}>
-              Logout
-            </Link>
-          </div>
-        </nav>
+        <Navbar />
         <div className="centered-container-base">
           <div
             onClick={() => {
