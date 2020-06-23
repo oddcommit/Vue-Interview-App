@@ -67,14 +67,13 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    let context = this;
     axiosHttp
       .get('/users')
       .then((response) => {
-        context.props.setUsers(response.data);
+        this.props.setUsers(response.data);
       })
-      .catch(function (error) {
-        context.setState({ errorMessage: error.message });
+      .catch((error) => {
+        this.setState({ errorMessage: error.message });
       });
   }
 }

@@ -16,7 +16,7 @@ describe('test axiosRefreshLogic', () => {
     await axiosHttp
       .post('/something', { skipAuthRefresh: true })
       .then((response) => {})
-      .catch(function (error) {});
+      .catch((error) => {});
 
     expect(axiosSpy).toHaveBeenCalledTimes(2);
   });
