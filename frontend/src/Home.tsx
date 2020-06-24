@@ -6,19 +6,41 @@ import axiosHttp from './utils/axios';
 import { mainPageConstants } from './reducer/MainPageReducer';
 import Navbar from './components/Navbar';
 
+import { RootState } from './index';
+
 import './Main.scss';
 import './Home.scss';
+import { AxiosResponse } from 'axios';
+import { User, MainReducerState } from './reducer/MainPageReducerTypes';
 
-const mapStateToProps = (state) => ({
-  users: state.mainReducer.users,
-});
+interface DispatchProps {
+  setUsers: (value: Array<User>) => void;
+}
 
-const mapDispatchToProps = (dispatch) => ({
-  setUsers: (value) =>
+interface HomeState {
+  errorMessage: string;
+}
+
+type Props = DispatchProps & HomeState & MainReducerState;
+
+/**
+ * TODO: Add real action in dispatch
+ * @param dispatch
+ */
+const mapDispatchToProps = (dispatch: any): DispatchProps => ({
+  setUsers: (value: Array<User>) =>
     dispatch({ type: mainPageConstants.SET_USERS, payload: value }),
 });
 
-class Home extends Component {
+const mapStateToProps = (state: RootState) => ({
+  users: state.mainReducer.users,
+});
+
+class Home extends Component<Props, HomeState> {
+  state: HomeState = {
+    errorMessage: '',
+  };
+
   render() {
     return (
       <div className="container-home">
@@ -28,7 +50,7 @@ class Home extends Component {
             onClick={() => {
               axiosHttp
                 .get('/users')
-                .then((response) => {
+                .then((response: AxiosResponse<Array<User>>) => {
                   this.props.setUsers(response.data);
                 })
                 .catch((error) => {
