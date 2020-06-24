@@ -23,16 +23,25 @@ class App extends Component {
         .post('/renewToken', { skipAuthRefresh: true })
         .then((tokenRefreshResponse) => {
           loginUser(tokenRefreshResponse.data.jwtToken);
-          this.setState({
-            isLoading: false,
-          });
+          setApplicationLoading(false);
         })
         .catch(() => {
-          logoutUser();
+          this.logoutUserAndRenderRoutes();
         });
     } else {
-      logoutUser();
+      this.logoutUserAndRenderRoutes();
     }
+  }
+
+  logoutUserAndRenderRoutes() {
+    setApplicationLoading(false);
+    logoutUser();
+  }
+
+  setApplicationLoading(value = false) {
+    this.setState({
+      isLoading: value,
+    });
   }
 
   render() {
