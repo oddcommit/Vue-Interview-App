@@ -1,12 +1,21 @@
-const loginConstants = {
+import {
+  LoginReducerState,
+  LoginConstants,
+  LoginAction,
+} from './LoginReducerTypes';
+
+const loginConstants: LoginConstants = {
   SET_LOGGED_IN: 'SET_LOGGED_IN',
 };
 
-const initalState = {
+const initalState: LoginReducerState = {
   isLoggedIn: false,
 };
 
-const loginReducer = (state = initalState, action) => {
+const loginReducer = (
+  state: LoginReducerState = initalState,
+  action: LoginAction
+): LoginReducerState => {
   switch (action.type) {
     case loginConstants.SET_LOGGED_IN:
       return {
@@ -17,4 +26,5 @@ const loginReducer = (state = initalState, action) => {
       return state;
   }
 };
+
 export { loginReducer, loginConstants };
