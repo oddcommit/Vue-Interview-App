@@ -16,11 +16,6 @@ class App extends Component {
     isLoading: true,
   };
 
-  deleteTokenAndPushToLogin() {
-    logoutUser();
-    this.setState({ isLoading: false });
-  }
-
   componentDidMount() {
     let jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
@@ -32,11 +27,11 @@ class App extends Component {
             isLoading: false,
           });
         })
-        .catch((error) => {
-          this.deleteTokenAndPushToLogin();
+        .catch(() => {
+          logoutUser();
         });
     } else {
-      this.deleteTokenAndPushToLogin();
+      logoutUser();
     }
   }
 

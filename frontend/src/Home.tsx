@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 import axiosHttp from './utils/axios';
 import { mainPageConstants } from './reducer/MainPageReducer';
@@ -46,20 +46,13 @@ class Home extends Component<Props, HomeState> {
       <div className="container-home">
         <Navbar />
         <div className="centered-container-base">
-          <div
+          <Button
             onClick={() => {
-              axiosHttp
-                .get('/users')
-                .then((response: AxiosResponse<Array<User>>) => {
-                  this.props.setUsers(response.data);
-                })
-                .catch((error) => {
-                  this.setState({ errorMessage: error.message });
-                });
+              this.fetchUsers();
             }}
           >
-            Click me!
-          </div>
+            Refetch users
+          </Button>
           <h1>User overview</h1>
           <div>
             <Table responsive>
@@ -88,15 +81,19 @@ class Home extends Component<Props, HomeState> {
     );
   }
 
-  componentDidMount() {
+  fetchUsers() {
     axiosHttp
       .get('/users')
-      .then((response) => {
+      .then((response: AxiosResponse<Array<User>>) => {
         this.props.setUsers(response.data);
       })
       .catch((error) => {
         this.setState({ errorMessage: error.message });
       });
+  }
+
+  componentDidMount() {
+    this.fetchUsers();
   }
 }
 
