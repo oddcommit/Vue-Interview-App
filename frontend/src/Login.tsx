@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
 import axiosHttp from './utils/axios';
 import './Login.scss';
+import { LoginUiState, LoginPost, LoginResponse } from './LoginTypes';
+import { AxiosAuthRefreshRequestConfig } from 'axios-auth-refresh';
 import { Button, Form, Alert } from 'react-bootstrap';
 import { loginUser, logoutUser } from './utils/loginUtils';
+import { AxiosResponse } from 'axios';
 
 class Login extends Component {
-  state = {
+  state: LoginUiState = {
     email: '',
     password: '',
     errorMessage: '',
-    isLoginError: false,
   };
 
-  loginClicked() {
-    this.setState({ isLoginError: false });
+  public loginClicked(): void {
+    let emailAndPasswordPostRequest: LoginPost = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+
+    let axiosConfig: AxiosAuthRefreshRequestConfig = { skipAuthRefresh: true };
 
     axiosHttp
-      .post(
-        '/login',
-        {
-          email: this.state.email,
-          password: this.state.password,
-        },
-        { skipAuthRefresh: true }
-      )
-      .then((response) => {
-        let jwtToken = response.data.jwtToken;
+      .post('/login', emailAndPasswordPostRequest, axiosConfig)
+      .then((response: AxiosResponse<LoginResponse>) => {
+        let jwtToken: string = response.data.jwtToken;
         loginUser(jwtToken);
       })
       .catch((error) => {
@@ -34,20 +34,22 @@ class Login extends Component {
       });
   }
 
-  updateStateEmail = (e) => {
+  private updateStateEmail = (e: any): void => {
     this.setState({ email: e.target.value });
   };
 
-  updateStatePassword = (e) => {
+  private updateStatePassword = (e: any): void => {
     this.setState({ password: e.target.value });
   };
 
   render() {
+    let errorMessage: string = this.state.errorMessage;
     let usernameOrPasswordIncorrectAlert;
-    if (this.state.errorMessage) {
+
+    if (errorMessage) {
       usernameOrPasswordIncorrectAlert = (
         <Alert className="username-password-incorrect" variant="danger">
-          {this.state.errorMessage}
+          {errorMessage}
         </Alert>
       );
     }

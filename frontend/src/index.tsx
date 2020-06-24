@@ -16,6 +16,8 @@ let allReducers = combineReducers({
   mainReducer: mainReducer,
 });
 
+export type RootState = ReturnType<typeof allReducers>;
+
 const store = createStore(allReducers);
 
 ReactDOM.render(
