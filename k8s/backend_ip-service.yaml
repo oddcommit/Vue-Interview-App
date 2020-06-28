@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP
+  slector:
+    component: backend-api
+  ports: 
+    - port: 4667
+      targetPort: 4667
+

@@ -1,0 +1,33 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: backend-api-deployment
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       component: backend-api
+#   template:
+#     metadata:
+#       labels:
+#         component: backend-api
+#     spec:
+#       containers:
+#         - name: backend-api
+#           image: 21321321421441/interview-example-project:0.0.1
+#           ports:
+#             - containerPort: 4667
+#           env:
+#             - name: POSTGRES_USER
+#               value: postgres
+#             - name: POSTGRES_HOST
+#               value: postgres-cluster-ip-service
+#             - name: POSTGRES_PORT
+#               value: '5432'
+#             - name: POSTGRES_DB
+#               value: postgres
+#             - name: POSTGRES_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: pg_password
+#                   key: POSTGRES_PASSWORD

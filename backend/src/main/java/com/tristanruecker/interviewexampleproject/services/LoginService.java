@@ -58,22 +58,20 @@ public class LoginService {
                     TextConstants.AGE_NOT_APPROPRIATE);
         }
 
-        if (!userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new CustomException(HttpStatus.BAD_REQUEST,
                     TextConstants.EMAIL_ALREADY_IN_USE);
         }
 
-        if (!userRepository.existsByEmail(user.getEmail())) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-            UserRole userRole = new UserRole();
-            userRole.setRoleName(Roles.USER);
-            userRole.setUser(user);
-            user.setUserRoles(Collections.singleton(userRole));
+        UserRole userRole = new UserRole();
+        userRole.setRoleName(Roles.USER);
+        userRole.setUser(user);
+        user.setUserRoles(Collections.singleton(userRole));
 
-            userRepository.save(user);
-            //TODO: Send E-Mail verification link
-        }
+        userRepository.save(user);
+        //TODO: Send E-Mail verification link
 
     }
 

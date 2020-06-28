@@ -1,7 +1,6 @@
 package com.tristanruecker.interviewexampleproject.config.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
@@ -22,16 +21,13 @@ import java.io.IOException;
  */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final CertificateUtils certificateUtils;
     private final JwtUtils jwtUtils;
     private final ObjectMapper objectMapper;
 
     JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-                           CertificateUtils certificateUtils,
                            ObjectMapper objectMapper,
                            JwtUtils jwtUtils) {
         super(authenticationManager);
-        this.certificateUtils = certificateUtils;
         this.objectMapper = objectMapper;
         this.jwtUtils = jwtUtils;
     }

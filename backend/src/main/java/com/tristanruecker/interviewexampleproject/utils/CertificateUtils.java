@@ -39,7 +39,6 @@ import java.util.*;
 @Component
 public class CertificateUtils {
 
-
     @Value("${security.token.lifetime.in.days}")
     private int tokenLifetimeInDays;
 

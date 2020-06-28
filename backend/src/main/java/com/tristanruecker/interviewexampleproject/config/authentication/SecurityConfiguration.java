@@ -43,7 +43,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(),
-                        certificateUtils,
                         objectMapper,
                         jwtUtils))
                 .sessionManagement()
