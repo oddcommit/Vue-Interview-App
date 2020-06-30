@@ -65,7 +65,7 @@ class Home extends Component<Props, HomeState> {
                 </tr>
               </thead>
               <tbody>
-                {this.props.users.map((user) => (
+                {this.props.users.map((user: User) => (
                   <tr key={user.id}>
                     <td>{user.id}</td>
                     <td>{user.email}</td>

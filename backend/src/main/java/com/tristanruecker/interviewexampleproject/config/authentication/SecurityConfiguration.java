@@ -3,6 +3,7 @@ package com.tristanruecker.interviewexampleproject.config.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
+import com.tristanruecker.interviewexampleproject.utils.EnvironmentUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private EnvironmentUtils environmentUtils;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
@@ -44,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(),
                         objectMapper,
-                        jwtUtils))
+                        jwtUtils, environmentUtils))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

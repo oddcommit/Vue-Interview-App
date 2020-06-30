@@ -1,6 +1,7 @@
 package com.tristanruecker.interviewexampleproject.config.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tristanruecker.interviewexampleproject.utils.EnvironmentUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
@@ -23,18 +24,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtUtils jwtUtils;
     private final ObjectMapper objectMapper;
+    private final EnvironmentUtils environmentUtils;
+
 
     JwtAuthorizationFilter(AuthenticationManager authenticationManager,
                            ObjectMapper objectMapper,
-                           JwtUtils jwtUtils) {
+                           JwtUtils jwtUtils, EnvironmentUtils environmentUtils) {
         super(authenticationManager);
         this.objectMapper = objectMapper;
         this.jwtUtils = jwtUtils;
+        this.environmentUtils = environmentUtils;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
+
         String tokenHeader = request.getHeader("Authorization");
         boolean isAuthorizationHeaderAndTokenVisible = isAuthorizationHeaderAndTokenVisible(tokenHeader);
         if (!isAuthorizationHeaderAndTokenVisible) {
@@ -42,7 +47,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        if (request.getRequestURI().equals("/api/renewToken")) {
+        if (request.getRequestURI().equals(environmentUtils.getSecurityBaseUrl() + "/renewToken")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+spec:
+  rules:
+    - http:
+        paths:
+          # - path: /
+          #   serviceName: frontend-ip-service
+          #   servicePort: something
+          - path: /api/
+            backend:
+              serviceName: backend-ip-service
+              servicePort: 4667
