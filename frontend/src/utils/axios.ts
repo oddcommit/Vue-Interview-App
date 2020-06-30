@@ -10,8 +10,7 @@ let createAxios = () => {
   let jwtToken: string | null = localStorage.getItem('jwtToken');
 
   let axiosRequestConfig: AxiosRequestConfig = {
-    baseURL: 'http://localhost:4667/api',
-    //TODO: Replace this with environment variable
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
       ...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
       'content-type': 'application/json',
