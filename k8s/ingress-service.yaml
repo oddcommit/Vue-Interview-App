@@ -6,9 +6,10 @@ spec:
   rules:
     - http:
         paths:
-          # - path: /
-          #   serviceName: frontend-ip-service
-          #   servicePort: something
+          - path: /
+            backend:
+              serviceName: frontend-ip-service
+              servicePort: 80
           - path: /api/
             backend:
               serviceName: backend-ip-service

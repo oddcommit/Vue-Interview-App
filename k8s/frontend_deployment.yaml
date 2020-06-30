@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-react
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: frontend-react
+  template:
+    metadata:
+      labels:
+        component: frontend-react
+    spec:
+      containers:
+        - name: frontend-react
+          image: 21321321421441/interview-example-project-frontend:1.0.1
+          ports:
+            - containerPort: 80
