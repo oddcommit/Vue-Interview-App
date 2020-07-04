@@ -10,11 +10,13 @@
     </parent>
     <groupId>com.tristanruecker</groupId>
     <artifactId>interview-example-project</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${project.version}-${release.type}</version>
     <name>interview-example-project</name>
     <description>Demo project for an interview example project</description>
 
     <properties>
+        <project.version>1.0.0</project.version>
+        <release.type>SNAPSHOT</release.type>
         <java.version>11</java.version>
         <retrofit.version>2.9.0</retrofit.version>
     </properties>

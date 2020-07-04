@@ -50,5 +50,5 @@ TODO list:
 1. Write scripts to automate the deployment process and build docker containers and pushing them to docker hub
 2. Maybe use "Travis CI" or some other build tool to monitor builds and execute some steps for production
 3. When starting the integration tests run a fresh docker container on start (integration tests will currently be always successfull) and maybe some clean up logic after every integration test
-4. Write much more tests especially for the frontend and the backend
+4. Write much more tests especially for the frontend and the backend 
 5. More coming soon...
