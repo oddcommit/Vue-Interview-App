@@ -4,11 +4,12 @@ package com.tristanruecker.interviewexampleproject.controller;
 import com.tristanruecker.interviewexampleproject.base.IntegrationTestBaseClass;
 import com.tristanruecker.interviewexampleproject.base.api.LoginControllerApi;
 import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class LoginControllerITTest extends IntegrationTestBaseClass {
@@ -32,7 +33,7 @@ public class LoginControllerITTest extends IntegrationTestBaseClass {
                 .body()
                 .getJwtToken();
 
-        Assertions.assertTrue(jwtToken.length() > 0);
+        assertTrue(jwtToken.length() > 0);
     }
 
 

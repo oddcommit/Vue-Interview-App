@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SecurityConfigurationITTest extends IntegrationTestBaseClass {
 
@@ -33,25 +33,23 @@ class SecurityConfigurationITTest extends IntegrationTestBaseClass {
         UserControllerApi userControllerApi = createRetrofitClient(UserControllerApi.class);
         Response<List<User>> usersResponse = userControllerApi.getAllUsersWithourAuthorization().execute();
 
-        assertThat(usersResponse.code() == 403);
-        assertThat(usersResponse.errorBody().string().length() > 0);
+        assertEquals(403, usersResponse.code());
     }
 
     @Test
     void testExpiredJWTTokenFail() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InterruptedException {
         String token = create2MicrosecondsValidJWTToken();
-        Thread.sleep(1);
+        Thread.sleep(4);
         UserControllerApi userControllerApi = createRetrofitClient(UserControllerApi.class, token);
 
         Response<List<User>> usersResponse = userControllerApi.getAllUsersWithourAuthorization().execute();
-        assertThat(usersResponse.code() == 401);
-        assertThat(usersResponse.errorBody().string().length() > 0);
+        assertEquals(401, usersResponse.code());
     }
 
     private String create2MicrosecondsValidJWTToken() throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS512;
         Key privateKey = readPrivateKey();
-        String userEmail = "tristan.ruecker@gmail.com";
+        String userEmail = "test.registration@gmail.com";
 
         Instant instant = Instant.now();
         Instant expirationInstant = instant.plus(1, ChronoUnit.MICROS);

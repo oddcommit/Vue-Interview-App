@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -54,10 +55,14 @@ public class JwtUtils {
 
         List<String> userRoles = claims.get("roles", List.class);
         String email = claims.get("sub", String.class);
-        List<GrantedAuthority> grantedAuths = AuthorityUtils
-                .createAuthorityList(String.join(",", userRoles));
-        jwtParseResultObject.setUsernamePasswordAuthenticationToken(
-                new UsernamePasswordAuthenticationToken(email, null, grantedAuths));
+
+        if (CollectionUtils.isNotEmpty(userRoles)) {
+            List<GrantedAuthority> grantedAuths = AuthorityUtils
+                    .createAuthorityList(String.join(",", userRoles));
+            jwtParseResultObject.setUsernamePasswordAuthenticationToken(
+                    new UsernamePasswordAuthenticationToken(email, null, grantedAuths));
+        }
+
         return jwtParseResultObject;
     }
 }
