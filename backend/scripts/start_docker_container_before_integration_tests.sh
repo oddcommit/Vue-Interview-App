@@ -14,10 +14,10 @@ is_container_running() {
   echo "Checking if container is running..."
   container_running=$(docker ps | grep postgres | grep "0.0.0.0:5432->5432/tcp")
   if [[ -z "$container_running" ]]; then
-    echo "Container seems to be not running"
+    echo "Container is not running.. trying starting it up"
     docker-compose -f ../docker-compose.yml up -d
   fi
-  echo "Container is successfully running!"
+  echo "Container is running successfully!"
 }
 
 wait_docker_start_to_finish() {
