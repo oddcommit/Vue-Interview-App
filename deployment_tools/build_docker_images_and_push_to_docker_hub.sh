@@ -7,7 +7,7 @@ backendDockerFile=../backend/Dockerfile
 
 replaceText() {
     # Mac got a slightly different SED (FreeBSD sed)
-    if [ "$(uname)" == "Darwin" ]; then
+    if [[ "$(uname)" == "Darwin" ]]; then
         sed -i '' "s/$1/$2/g" $3
     else
         sed -i "s/$1/$2/g" $3
@@ -34,7 +34,7 @@ backendTagName=21321321421441/interview-example-project-backend
 frontendTagName=21321321421441/interview-example-project-frontend
 
 echo "Starting to build docker container releases and push them to docker hub"
-docker info 1>/dev/null 2>/dev/null
+docker info &>/dev/null
 
 build_backend_docker_container() {
     echo "Prepare 'pom.xml' file for production..."

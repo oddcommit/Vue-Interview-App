@@ -24,7 +24,7 @@ docker-compose up
 3. Starting the backend:
 
 ```
-mvn clean install
+mvn clean package
 ```
 ```
 Open Intellij and jump to class: 

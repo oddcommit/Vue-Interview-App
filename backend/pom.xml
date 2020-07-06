@@ -170,19 +170,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <configuration>
-                    <url>jdbc:postgresql://localhost:54320/postgres</url>
-                    <user>postgres</user>
-                    <password>postgres</password>
-                    <locations>
-                        <location>classpath:db/migration</location>
-                    </locations>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -213,6 +200,32 @@
                             <includes>
                                 <include>**/*ITTest.java</include>
                             </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- This plugin is used is if the user wants to run integration tests locally on any computer.
+                 The script is checking if docker is running with the related containers, who are needed
+                 to run the integration tests.
+                 A script for windows has to be implemented in the future.
+                 See: https://stackoverflow.com/questions/14809931/maven-calls-external-script-on-both-linux-and-windows-platforms
+                 To run the integration tests for windows you have to manually make sure that docker is running
+                 and you executed the docker-compose up in this directory.
+             -->
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                    <execution>
+                        <id>build-database-for-integrationtests</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${basedir}/scripts/start_docker_container_before_integration_tests.sh
+                            </executable>
                         </configuration>
                     </execution>
                 </executions>
