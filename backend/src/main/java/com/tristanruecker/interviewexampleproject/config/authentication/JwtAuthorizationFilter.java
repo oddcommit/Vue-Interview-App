@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         switch (jwtParseResultObject.getJwtParseResult()) {
             case SUCCESS:
                 SecurityContextHolder.getContext().setAuthentication(jwtParseResultObject.getUsernamePasswordAuthenticationToken());
-                break;
+                return;
             case EXPIRED:
                 UnauthorizedException unauthorizedException = new UnauthorizedException(HttpStatus.UNAUTHORIZED, "Access denied.");
                 String unauthorizedResponse = objectMapper.writeValueAsString(unauthorizedException);
