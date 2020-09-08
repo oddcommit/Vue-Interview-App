@@ -39,11 +39,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String[] roles = {Roles.USER.toString(), Roles.SUPERADMIN.toString()};
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(securityExclusionPattern).permitAll()
-                .antMatchers("/**").hasAuthority(Roles.USER.toString())
+                .antMatchers("/**")
+                .hasAnyAuthority(roles)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(),
