@@ -1,3 +1,7 @@
+import { User } from "@/views/types";
+
 export interface RootState {
-    loginError: string
+  loginError: string;
+  isLoggedIn: boolean;
+  users: Array<User>;
 }

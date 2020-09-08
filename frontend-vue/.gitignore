@@ -354,3 +354,9 @@ yarn-error.log
 # Sonarlint plugin
 
 # End of https://www.toptal.com/developers/gitignore/api/node,vuejs,visualstudiocode,react,maven,intellij+all,webstorm+all,java-web,java,angular
+
+
+
+# Own properties
+
+build/**

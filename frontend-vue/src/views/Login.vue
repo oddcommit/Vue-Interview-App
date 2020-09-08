@@ -28,11 +28,12 @@
 import Vue from "vue";
 import { mapActions } from "vuex";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { AxiosLoginErrorResponse } from "@/types";
-import { LoginPost, LoginResponse } from "./types";
+import { LoginPost } from "./types";
+import { JwtTokenReqestOrResponse, AxiosBackendError } from "@/types";
 import VueRouter, { RouteConfig } from "vue-router";
+import { loginUser } from "@/utils/authenticationUtils";
 
-export default Vue.extend({
+export default {
   name: "Login",
   data: function() {
     return {
@@ -47,37 +48,40 @@ export default Vue.extend({
       }
     },
     login: function(): void {
-      axios
-        .post<LoginResponse>(`http://localhost:4667/api/login`, {
-          email: this.email,
-          password: this.password,
+      this.$http
+        .post<JwtTokenReqestOrResponse>(
+          "/login",
+          {
+            email: this.email,
+            password: this.password,
+          },
+          { skipAuthRefresh: true }
+        )
+        .then((response: AxiosResponse<JwtTokenReqestOrResponse>) => {
+          loginUser(response.data.jwtToken);
         })
-        .then((response: AxiosResponse<LoginResponse>) => {
-          localStorage.setItem("jwtToken", response.data.jwtToken);
-          this.$router.push({ path: "/user" });
-        })
-        .catch((e: AxiosError<AxiosLoginErrorResponse>) => {
+        .catch((e: AxiosError<AxiosBackendError>) => {
           if (e && e.response) {
             this.loginError = e.response.data.errorMessage;
           } else {
             //TODO: Send mistake to server
-            this.loginError =
-              "Something really odd occurred. Please contect us at ...";
+            this.loginError = `We got some problems
+            at the moment. Error message: ${e.message}. Try again later.`;
           }
         });
     },
   },
   computed: {
     loginError: {
-      get() {
+      get(): string {
         return this.$store.state.loginError;
       },
-      set(value) {
+      set(value: string): void {
         this.$store.dispatch("SET_ERROR", value);
       },
     },
   },
-});
+};
 </script>
 
 <style lang="scss" scoped>
@@ -98,6 +102,7 @@ input {
 }
 
 .alert {
+  text-align: center;
   margin-bottom: 10px;
 }
 </style>
