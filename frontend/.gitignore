@@ -139,3 +139,10 @@ dist
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,yarn,node
+
+
+
+
+########## Own properties ##########
+
+build/**
