@@ -1,0 +1,10 @@
+nav {
+  padding: 10px;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  margin-left: auto;
+}
