@@ -1,9 +1,21 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
+import * as redux from "react-redux";
 
-test('renders learn react link', () => {
+jest.mock("react-bootstrap/esm/Spinner", () => ({ Spinner }: any) => (
+  <>{Spinner}</>
+));
+
+jest.mock("react-redux", () => ({
+  useSelector: () => jest.fn(),
+  useDispatch: () => jest.fn(),
+}));
+
+const spy = jest.spyOn(redux, "useSelector");
+spy.mockReturnValue({ isApplicationLoading: true });
+
+test("is loading showing", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/Loading.../i);
   expect(linkElement).toBeInTheDocument();
 });
