@@ -70,7 +70,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             case FAILED:
                 break;
         }
-        filterChain.doFilter(request, response);
+
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            logger.debug(e.getCause().getMessage() + ". StatusCode: " + response.getStatus() + " Address that is trying to access resource: " + request.getRemoteAddr());
+        }
     }
 
 

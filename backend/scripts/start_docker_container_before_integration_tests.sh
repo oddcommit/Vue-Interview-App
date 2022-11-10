@@ -1,3 +1,5 @@
+echo "Script to start docker and a postgres container for integration tests..."
+
 is_docker_running() {
   echo "Checking if docker is running..."
   docker_state=$(docker info >/dev/null 2>&1)
@@ -45,6 +47,8 @@ is_docker_running
 if [[ $? -ne 0 ]]; then
   echo "Docker seems not to be running..."
   start_docker
+else
+  echo "Docker is already running..."
 fi
 
 is_container_running

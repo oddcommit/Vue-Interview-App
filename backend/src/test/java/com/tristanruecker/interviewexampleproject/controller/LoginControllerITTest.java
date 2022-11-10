@@ -22,7 +22,7 @@ public class LoginControllerITTest extends IntegrationTestBaseClass {
     }
 
     @Test
-    void optainJWTToken() throws IOException {
+    void obtainJWTToken() throws IOException {
         UserEmailAndPassword userEmailAndPassword = new UserEmailAndPassword();
         userEmailAndPassword.setEmail("test.registration@gmail.com");
         userEmailAndPassword.setPassword("test1234");
