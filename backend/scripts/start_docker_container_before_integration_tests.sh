@@ -15,9 +15,17 @@ is_docker_running() {
 is_container_running() {
   echo "Checking if container is running..."
   container_running=$(docker ps | grep postgres | grep "0.0.0.0:5432->5432/tcp")
+
+  reldir="$(dirname -- "$0"; )";
+  cd "$reldir";
+  directory="$( pwd; )";
+
+  echo "Directory is ${directory}";
+
+
   if [[ -z "$container_running" ]]; then
     echo "Container is not running.. trying starting it up"
-    docker-compose -f ../docker-compose.yml up -d
+    docker-compose -f "${directory}/../docker-compose.yml" up -d
   fi
   echo "Container is running successfully!"
 }
