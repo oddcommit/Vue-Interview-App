@@ -230,6 +230,8 @@
             <properties>
                 <script.to.execute>${basedir}/scripts/start_docker_container_before_integration_tests.ps1
                 </script.to.execute>
+                <post.script.to.execute>${basedir}/scripts/stop_docker_container_after_integration_tests.ps1
+                </post.script.to.execute>
                 <script.executor>powershell.exe</script.executor>
             </properties>
         </profile>
@@ -243,6 +245,8 @@
             <properties>
                 <script.to.execute>${basedir}/scripts/start_docker_container_before_integration_tests.sh
                 </script.to.execute>
+                <post.script.to.execute>${basedir}/scripts/stop_docker_container_after_integration_tests.sh
+                </post.script.to.execute>
                 <script.executor>bash</script.executor>
             </properties>
         </profile>
@@ -256,6 +260,8 @@
             <properties>
                 <script.to.execute>${basedir}/scripts/start_docker_container_before_integration_tests.sh
                 </script.to.execute>
+                <post.script.to.execute>${basedir}/scripts/stop_docker_container_after_integration_tests.sh
+                </post.script.to.execute>
                 <script.executor>bash</script.executor>
             </properties>
         </profile>
@@ -274,7 +280,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>default-cli</id>
+                                <id>execute-local-integration-tests</id>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
@@ -282,6 +288,17 @@
                                 <configuration>
                                     <executable>${script.executor}</executable>
                                     <commandlineArgs>${script.to.execute}</commandlineArgs>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>execute-local-integration-tests-cleanup</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <executable>${script.executor}</executable>
+                                    <commandlineArgs>${post.script.to.execute}</commandlineArgs>
                                 </configuration>
                             </execution>
                         </executions>
