@@ -29,7 +29,7 @@ $is_container_running=$(docker ps | Select-String -Pattern "postgres" | Select-S
 
 if([string]::IsNullOrEmpty($is_container_running)) {
   echo "Container is not running.. trying starting it up"
-  docker-compose -f ../docker-compose.yml up -d
+  docker-compose -f "$($PSScriptRoot)\..\docker-compose.yml" up -d
   echo "Container successfully started"
 } else {
   echo "Container is currently running no need to start it"
