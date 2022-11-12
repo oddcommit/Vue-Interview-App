@@ -15,12 +15,13 @@ $maxRetries = 30
 while ([string]::IsNullOrEmpty(($(docker stats --no-stream) 2>$null)) -and ($currentRetries -lt $maxRetries)) {
   $currentRetries++
   Write-Output "Waiting for docker desktop to get started. Max retries: $($maxRetries). Current retries: $($currentRetries)"
-  Write-Output "sleep.."
+  Write-Output "sleep..."
   Start-Sleep -Seconds 2.0
 }
 
 
 if($currentRetries -eq $maxRetries) {
+  Write-Output "ERROR: Could not start docker. Exiting"
   exit 1
 }
 
