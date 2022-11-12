@@ -19,7 +19,7 @@ Write-Output "shutting down adminer with container id: $($adminerContainerName)"
 docker stop $adminerContainerName
 Write-Output "shutting down adminer with container id: $($backendContainerName)"
 docker stop $backendContainerName
-Write-Output "Script successfully ended and integration test containers shutted down correctly."
+Write-Output "Script successfully ended and integration test containers shut down correctly."
 
 
 
