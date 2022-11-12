@@ -282,6 +282,9 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
+                        <!-- Higher versions of this plugin are not starting docker currenty-->
+                        <version>3.0.0</version>
+
                         <executions>
                             <execution>
                                 <id>execute-local-integration-tests</id>
