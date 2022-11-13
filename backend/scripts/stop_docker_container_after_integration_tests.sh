@@ -1,13 +1,13 @@
 echo "Shutting down previously opened containers..."
 
-adminerContainerName=$(docker ps -aqf "name=backend-admin")
+adminerContainerName=$(docker ps -aqf "name=backend-adminer*")
 
 if [ -z "$adminerContainerName" ]; then
   echo "Can not shut down adminer correctly because it does not exist."
   exit 1
 fi
 
-backendContainerName=$(docker ps -aqf "name=backend-db-1")
+backendContainerName=$(docker ps -aqf "name=backend-postgres-db*")
 
 if [ -z "$backendContainerName" ]; then
   echo "Can not shut down postgres correctly because it does not exist."

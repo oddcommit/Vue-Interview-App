@@ -1,13 +1,13 @@
 Write-Output "Shutting down previously opened containers..."
 
-$adminerContainerName=$(docker ps -aqf "name=backend-admin")
+$adminerContainerName=$(docker ps -aqf "name=backend-adminer*")
 
 if([string]::IsNullOrEmpty($adminerContainerName)) {
   Write-Output "Can not shut down adminer correctly because it does not exist."
   exit 1
 }
 
-$backendContainerName=$(docker ps -aqf "name=backend-db-1")
+$backendContainerName=$(docker ps -aqf "name=backend-postgres-db*")
 
 if([string]::IsNullOrEmpty($backendContainerName)) {
   Write-Output "Can not shut down postgres correctly because it does not exist."
