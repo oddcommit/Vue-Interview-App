@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-api
-          image: 21321321421441/interview-example-project:0.0.9-RELEASE
+          image: 21321321421441/interview-example-project-backend:latest
           ports:
             - containerPort: 4667
           env:

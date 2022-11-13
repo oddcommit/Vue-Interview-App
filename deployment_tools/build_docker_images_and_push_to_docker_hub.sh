@@ -1,6 +1,7 @@
 # Normally this script is running on an jenkins server or somewhere else
 echo "Starting to build docker container releases and push them to docker hub..."
 
+dockerHubAccount=21321321421441
 backendTagName=interview-example-project-backend
 frontendTagName=interview-example-project-frontend
 
@@ -43,10 +44,15 @@ create_docker_file() {
       echo "Dockerfile preparation successful!"
 
       echo "Building docker image..."
-      docker build --tag $backendTagName:"$projectVersion" --tag $backendTagName:latest .
+      docker build -t $backendTagName:"$projectVersion" -t $backendTagName:latest .
       echo "Docker image build successful..."
+      echo "Tagging image..."
+      docker tag $backendTagName:"$projectVersion" $dockerHubAccount/$backendTagName:"$projectVersion"
+      docker tag $backendTagName:"$projectVersion" $dockerHubAccount/$backendTagName:latest
+      echo "Tagging successful"
       echo "Pushing image to docker hub..."
-      docker push 21321321421441/$backendTagName:"$projectVersion"
+      docker push $dockerHubAccount/$backendTagName:"$projectVersion"
+      docker push $dockerHubAccount/$backendTagName:latest
       echo "Push successful"
       cd "$scriptDirectory" || exit 1
 }
