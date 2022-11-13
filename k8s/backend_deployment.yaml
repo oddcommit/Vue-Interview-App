@@ -34,4 +34,4 @@ spec:
                   name: database-secret
                   key: password
             - name: POSTGRES_HOST
-              value: postgres-cluster-ip-service
+              value: postgres-cluster-ip-service.default.svc.cluster.local

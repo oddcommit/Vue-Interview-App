@@ -18,7 +18,7 @@ spec:
             claimName: postgres-pv-claim
       containers:
         - name: postgres
-          image: postgres:12.3
+          image: postgres:15.1
           ports:
             - containerPort: 5432
           volumeMounts:
