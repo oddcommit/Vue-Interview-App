@@ -28,7 +28,7 @@ build_backend_maven_project() {
     echo "Prepare 'pom.xml' file for production..."
     replaceText "<release.type>SNAPSHOT" "<release.type>RELEASE" "$pomFile"
     replaceText "spring.profiles.active=development" "spring.profiles.active=kubernetes" "$pomFile"
-    echo "Trying to create a successfull maven build..."
+    echo "Trying to create a successful maven build..."
 
     cd "$scriptDirectory"/../backend || exit 1
     ./mvnw clean install
@@ -62,6 +62,5 @@ cleanup() {
 build_backend_maven_project
 create_docker_file
 cleanup
-
 
 echo "Build script end."
