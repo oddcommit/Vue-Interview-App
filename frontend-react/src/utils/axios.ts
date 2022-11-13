@@ -7,7 +7,7 @@ let createAxios = () => {
     baseURL: process.env.REACT_APP_API_URL,
     headers: {
       ...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
-      "content-type": "application/json",
+      "Content-Type": "application/json",
     },
   };
   return axios.create(axiosRequestConfig);

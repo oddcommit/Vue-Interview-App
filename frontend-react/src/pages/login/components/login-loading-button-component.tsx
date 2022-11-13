@@ -13,7 +13,7 @@ interface LoginLoadingButtonProps {
 const LoginLoadingButton: React.FC<LoginLoadingButtonProps> = ({
   onClickLoginUser,
 }: LoginLoadingButtonProps) => {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const isLoginLoading = useSelector(
     (state: RootState) => state.loginReducer.isLoginLoading
   );

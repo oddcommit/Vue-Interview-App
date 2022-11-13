@@ -9,7 +9,7 @@ import { selectIsLoggedIn } from "../login/store/login-selectors";
 import "./users-view.css";
 
 const UsersView = () => {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const isUserLoggedIn = useSelector(selectIsLoggedIn);
 
   const users = useSelector((state: RootState) => state.userReducer.users);

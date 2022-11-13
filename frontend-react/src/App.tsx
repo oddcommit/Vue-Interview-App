@@ -5,7 +5,7 @@ import Spinner from "react-bootstrap/esm/Spinner";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RouterComponent from "./Router";
 import axiosHttp from "./utils/axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { AxiosResponse } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from ".";
@@ -20,7 +20,7 @@ export interface TokenRefreshResponse {
 }
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
 
   const isApplicationLoading = useSelector(
     (state: RootState) => state.generalReducer.isApplicationLoading

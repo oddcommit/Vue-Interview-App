@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
@@ -19,13 +19,13 @@ let combinedReducers = combineReducers({
 const store = createStore(combinedReducers, applyMiddleware(thunk));
 export type RootState = ReturnType<typeof combinedReducers>;
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root") as Element);
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

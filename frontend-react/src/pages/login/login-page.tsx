@@ -9,7 +9,7 @@ import { selectIsLoggedIn } from "./store/login-selectors";
 import "./login-page.css";
 
 const LoginView = (): ReactElement => {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
 
   const showLoginError = useSelector(
     (state: RootState) => state.loginReducer.showLoginError

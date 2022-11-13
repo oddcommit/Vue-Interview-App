@@ -5,7 +5,7 @@ import { selectIsLoggedIn } from "../pages/login/store/login-selectors";
 import "./navbar-component.css";
 
 const NavbarComponent = () => {
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const isUserLoggedIn = useSelector(selectIsLoggedIn);
 
   if (!isUserLoggedIn) {
