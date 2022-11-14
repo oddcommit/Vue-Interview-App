@@ -3,9 +3,10 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
 spec:
-  ingressClassName: nginx
   rules:
     - host: interview-example.com
       http:
