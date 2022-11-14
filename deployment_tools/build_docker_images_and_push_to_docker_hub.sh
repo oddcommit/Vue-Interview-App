@@ -103,8 +103,18 @@ create_react_frontend_docker_file() {
     cd "$scriptDirectory" || exit 1
 }
 
+cleanup_frontend() {
+  echo "Clean up frontend build folder"
+  cd "$frontendReactFolder" || exit 1
+  rm -rf build
+  cd "$scriptDirectory" || exit 1
+  echo "Clean up successful"
+}
+
+
 build_frontend_react_project
 create_react_frontend_docker_file
+cleanup_frontend
 
 # End
 echo "Build script end."
