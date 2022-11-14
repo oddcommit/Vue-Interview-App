@@ -9,7 +9,7 @@ scriptDirectory="$( pwd; )";
 # Build backend
 backendTagName=interview-example-project-backend
 backendFolder=$scriptDirectory/../backend
-pomFile=$backendFolder/backend/pom.xml
+pomFile=$backendFolder/pom.xml
 backendDockerFile=$backendFolder/Dockerfile
 
 projectBackendVersion="$(cat "$pomFile" | grep "<project.version>" | grep -Eo "[0-9]+.[0-9]+.[0-9]+")"
@@ -77,7 +77,7 @@ projectFrontendVersion="$(cat "$packageJsonFile" | grep "\"version\"" | grep -Eo
 build_frontend_react_project() {
     echo "Prepare 'package.json' file for production..."
     echo "Trying to create a successful frontend-react build..."
-    cd $frontendReactFolder || exit 1
+    cd "$frontendReactFolder" || exit 1
     echo "Run: npm install"
     npm install
     echo "Run: npm build"
@@ -86,8 +86,8 @@ build_frontend_react_project() {
     cd "$scriptDirectory" || exit 1
 }
 
-create_backend_docker_file() {
-    cd $frontendReactFolder || exit 1
+create_react_frontend_docker_file() {
+    cd "$frontendReactFolder" || exit 1
     echo "Prepare frontend-react Dockerfile for production..."
     echo "Building docker image..."
     docker build -t $frontendTagName:"$projectFrontendVersion" -t $frontendTagName:latest .
@@ -104,7 +104,7 @@ create_backend_docker_file() {
 }
 
 build_frontend_react_project
-create_backend_docker_file
+create_react_frontend_docker_file
 
 # End
 echo "Build script end."
