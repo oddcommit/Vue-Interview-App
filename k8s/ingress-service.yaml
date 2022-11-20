@@ -8,13 +8,20 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-    - host: interview-example.com
+    - host: interview.test
       http:
         paths:
           - path: /
             pathType: Prefix
-            backend:
+            frontend:
               service:
                 name: frontend-ip-service
                 port:
                   number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-ip-service
+                port:
+                  number: 4667
