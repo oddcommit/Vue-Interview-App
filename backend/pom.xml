@@ -274,7 +274,7 @@
             <id>default-profile</id>
             <activation>
                 <property>
-                    <name>!unsetDefaultProfile</name>
+                    <name>!skipIntegrationTests</name>
                 </property>
             </activation>
             <build>
