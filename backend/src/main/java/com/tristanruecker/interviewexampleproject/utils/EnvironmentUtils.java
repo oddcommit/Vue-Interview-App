@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class EnvironmentUtils {
 
 
-    @Value("${security.base.url}")
+    @Value("${server.servlet.context-path}")
     private String securityBaseUrl;
 
     public String getSecurityBaseUrl() {
