@@ -7,5 +7,9 @@ spec:
   selector:
     component: backend-api
   ports:
-    - port: 4667
+    - name: http
+      port: 80
+      targetPort: 4667
+    - name: https
+      port: 443
       targetPort: 4667
