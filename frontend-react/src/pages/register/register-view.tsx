@@ -1,7 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import axiosHttp from "../../utils/axios";
 import "./register-view.css";
+
+interface RegisterObject {
+  [key: string]: string | number;
+}
 
 interface RegisterFormControl {
   key: string;
@@ -15,12 +19,13 @@ interface RegisterFormControl {
 }
 
 const RegisterView = () => {
-  const [registeredFormControls, setRegisteredFormControls] = useState([
+  const [registeredFormControls, setRegisteredFormControls] = useState<
+    Array<RegisterFormControl>
+  >([
     {
       key: "email",
       type: "email",
       placeholder: "Email",
-      isInvalid: false,
       value: "",
       error: {
         isInvalid: false,
@@ -61,7 +66,6 @@ const RegisterView = () => {
       key: "gender",
       type: "select",
       placeholder: "Gender",
-      isInvalid: false,
       value: "",
       error: {
         isInvalid: false,
@@ -107,70 +111,112 @@ const RegisterView = () => {
     registeredFormControlsCopy.forEach((registeredFormControl) => {
       if (!registeredFormControl.value) {
         registeredFormControl.error.isInvalid = true;
+        return;
+      }
+
+      if (
+        registeredFormControl.key === "age" &&
+        !Number(registeredFormControl.value)
+      ) {
+        registeredFormControl.error.isInvalid = true;
       }
     });
 
-    if (registeredFormControlsCopy.filter((e) => e.error.isInvalid)) {
+    if (
+      registeredFormControlsCopy.filter((e) => e.error.isInvalid).length > 0
+    ) {
       setRegisteredFormControls(registeredFormControlsCopy);
       return;
     }
+
+    const axiosRegisterObject: RegisterObject = {};
+
+    registeredFormControlsCopy.forEach(
+      (registeredFormControl: RegisterFormControl) => {
+        const { key, value } = registeredFormControl;
+
+        axiosRegisterObject[key] = Number(value) ? Number(value) : value;
+      }
+    );
+
+    axiosHttp
+      .post("/register", axiosRegisterObject)
+      .then((response) => {
+        if (response.status == 201) {
+          console.log("Successful");
+        }
+      })
+      .catch(() => {
+        console.error("Error registering");
+      });
   };
 
   return (
     <>
-      <div className="center">
-        <div className="login-container">
-          {registeredFormControls.map(
-            (registerFormControl: RegisterFormControl, index: number) => {
-              if (registerFormControl.type !== "select") {
-                return (
-                  <FloatingLabel
-                    key={registerFormControl.key}
-                    controlId={`formBasic${registerFormControl.key}`}
-                    label={registerFormControl.placeholder}
-                    className="mb-3"
-                  >
-                    <Form.Control
-                      name={registerFormControl.key}
-                      type={registerFormControl.type}
-                      placeholder={registerFormControl.placeholder}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        onChangeRegisterData(event, index)
-                      }
-                      className={
-                        registerFormControl.error.isInvalid ? "is-invalid" : ""
-                      }
-                    />
-                  </FloatingLabel>
-                );
-              }
-
+      <div className="register-container">
+        {registeredFormControls.map(
+          (registerFormControl: RegisterFormControl, index: number) => {
+            if (registerFormControl.type !== "select") {
               return (
                 <FloatingLabel
-                  controlId={`formBasic${registerFormControl.key}`}
-                  label="Gender"
                   key={registerFormControl.key}
+                  controlId={`formBasic${registerFormControl.key}`}
+                  label={
+                    registerFormControl.error.isInvalid
+                      ? registerFormControl.error.errorMessage
+                      : registerFormControl.placeholder
+                  }
+                  className={`mb-3 ${
+                    registerFormControl.error.isInvalid ? "register-error" : ""
+                  } `}
                 >
-                  <Form.Select
-                    aria-label="Floating label select example"
-                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                      onChangeRegisterSelectData(event, index)
+                  <Form.Control
+                    name={registerFormControl.key}
+                    type={registerFormControl.type}
+                    placeholder={registerFormControl.placeholder}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      onChangeRegisterData(event, index)
                     }
                     className={
                       registerFormControl.error.isInvalid ? "is-invalid" : ""
                     }
-                  >
-                    <option value="">Choose an option</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="MALE">Male</option>
-                  </Form.Select>
+                  />
                 </FloatingLabel>
               );
             }
-          )}
 
-          <Button onClick={register}>Register</Button>
-        </div>
+            return (
+              <FloatingLabel
+                controlId={`formBasic${registerFormControl.key}`}
+                label="Gender"
+                key={registerFormControl.key}
+                className={`mb-3 ${
+                  registerFormControl.error.isInvalid ? "register-error" : ""
+                }`}
+              >
+                <Form.Select
+                  aria-label="Floating label select example"
+                  onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                    onChangeRegisterSelectData(event, index)
+                  }
+                  className={
+                    registerFormControl.error.isInvalid ? "is-invalid" : ""
+                  }
+                >
+                  <option value="">Choose an option</option>
+                  <option className="register-gender-select" value="MALE">
+                    Male
+                  </option>
+                  <option className="register-gender-select" value="FEMALE">
+                    Female
+                  </option>
+                </Form.Select>
+              </FloatingLabel>
+            );
+          }
+        )}
+
+        <Button onClick={register}>Register</Button>
       </div>
     </>
   );

@@ -53,14 +53,14 @@ public class LoginService {
                     TextConstants.INVALID_EMAIL);
         }
 
-        if (user.getAge() < 0 || user.getAge() > 130) {
-            throw new CustomException(HttpStatus.BAD_REQUEST,
-                    TextConstants.AGE_NOT_APPROPRIATE);
-        }
-
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new CustomException(HttpStatus.BAD_REQUEST,
                     TextConstants.EMAIL_ALREADY_IN_USE);
+        }
+
+        if (user.getAge() < 0 || user.getAge() > 130) {
+            throw new CustomException(HttpStatus.BAD_REQUEST,
+                    TextConstants.AGE_NOT_APPROPRIATE);
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
