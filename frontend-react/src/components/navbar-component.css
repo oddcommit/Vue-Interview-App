@@ -5,6 +5,35 @@ nav {
   align-items: center;
 }
 
-.navbar-button {
+.heading {
+  margin: 0;
+}
+
+.nav-heading {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr repeat(1, auto) 1fr;
+  grid-column-gap: 5px;
+  justify-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-heading > li:nth-child(1) {
+  grid-column-start: 2;
+}
+
+.nav-heading > li:nth-child(2) {
   margin-left: auto;
+}
+
+.nav-heading > li {
+  padding: 5px;
+}
+
+.nav-center-button {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }

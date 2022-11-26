@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUsers } from "./requests/user-requests";
 import { RootState } from "../..";
 import { User } from "./types";
-import NavbarComponent from "../../components/navbar-component";
 import { selectIsLoggedIn } from "../login/store/login-selectors";
 import "./users-view.css";
 
@@ -24,7 +23,6 @@ const UsersView = () => {
 
   return (
     <>
-      <NavbarComponent />
       <div className="users-container">
         <div>Users view</div>
         <Table striped bordered hover className="mt-3">

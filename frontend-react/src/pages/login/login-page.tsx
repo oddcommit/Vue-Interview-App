@@ -54,51 +54,53 @@ const LoginView = (): ReactElement => {
   }
 
   return (
-    <div className="login-centered">
-      <div className="login-container">
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address:</Form.Label>
-          <Form.Control
-            bsPrefix={`form-control ${
-              showEmailEmptyError ? "login-form-error" : ""
-            }`}
-            name="email"
-            type="email"
-            placeholder="Enter email"
-            onChange={onChangeLoginData}
-          />
+    <>
+      <div className="login-centered">
+        <div className="login-container">
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email address:</Form.Label>
+            <Form.Control
+              bsPrefix={`form-control ${
+                showEmailEmptyError ? "login-form-error" : ""
+              }`}
+              name="email"
+              type="email"
+              placeholder="Enter email"
+              onChange={onChangeLoginData}
+            />
 
-          {showEmailEmptyError && (
-            <div className="login-text-error">E-Mail can not be empty</div>
+            {showEmailEmptyError && (
+              <div className="login-text-error">E-Mail can not be empty</div>
+            )}
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPassword" className="mt-2">
+            <Form.Label>Password:</Form.Label>
+            <Form.Control
+              bsPrefix={`form-control ${
+                showPasswordEmptyError ? "login-form-error" : ""
+              }`}
+              name="password"
+              type="password"
+              placeholder="Password"
+              onChange={onChangeLoginData}
+            />
+
+            {showPasswordEmptyError && (
+              <div className="login-text-error">Password can not be empty</div>
+            )}
+          </Form.Group>
+
+          {showLoginError && (
+            <Alert variant={"danger"} className="mt-3 mb-3">
+              Sorry, wrong e-mail or wrong password!
+            </Alert>
           )}
-        </Form.Group>
 
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password:</Form.Label>
-          <Form.Control
-            bsPrefix={`form-control ${
-              showPasswordEmptyError ? "login-form-error" : ""
-            }`}
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={onChangeLoginData}
-          />
-
-          {showPasswordEmptyError && (
-            <div className="login-text-error">Password can not be empty</div>
-          )}
-        </Form.Group>
-
-        {showLoginError && (
-          <Alert variant={"danger"}>
-            Sorry, wrong e-mail or wrong password!
-          </Alert>
-        )}
-
-        <LoginLoadingButton onClickLoginUser={loginUser} />
+          <LoginLoadingButton onClickLoginUser={loginUser} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

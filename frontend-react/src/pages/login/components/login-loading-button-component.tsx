@@ -26,7 +26,7 @@ const LoginLoadingButton: React.FC<LoginLoadingButtonProps> = ({
 
   return (
     <Button
-      variant="primary login-button"
+      variant="primary login-button mt-3"
       type="submit"
       onClick={onClickLoginUser}
     >
