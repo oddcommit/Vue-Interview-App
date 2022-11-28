@@ -3,6 +3,7 @@ package com.tristanruecker.interviewexampleproject.services;
 import com.tristanruecker.interviewexampleproject.base.UnitTestBaseClass;
 import com.tristanruecker.interviewexampleproject.config.exception.CustomException;
 import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.repositores.CaptchaRepository;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
@@ -21,10 +22,11 @@ public class LoginServiceUnitTest extends UnitTestBaseClass {
 
     @BeforeEach
     void mockBeforeTest(@Mock UserRepository userRepository,
+                        @Mock CaptchaRepository captchaRepository,
                         @Mock BCryptPasswordEncoder bCryptPasswordEncoder,
                         @Mock CertificateUtils certificateUtils,
                         @Mock JwtUtils jwtUtils) {
-        loginService = new LoginService(certificateUtils, bCryptPasswordEncoder, userRepository, jwtUtils);
+        loginService = new LoginService(certificateUtils, bCryptPasswordEncoder, userRepository, jwtUtils, captchaRepository);
     }
 
 

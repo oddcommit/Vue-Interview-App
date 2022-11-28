@@ -20,12 +20,21 @@ const store = createStore(combinedReducers, applyMiddleware(thunk));
 export type RootState = ReturnType<typeof combinedReducers>;
 
 const root = ReactDOM.createRoot(document.getElementById("root") as Element);
+
+/*
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
   </React.StrictMode>
+);
+**/
+
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

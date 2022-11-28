@@ -15,6 +15,12 @@ import {
   logoutUser,
 } from "./authentication/authentication-thunk";
 
+
+export interface AxiosErrorMessage {
+  errorMessage: string;
+  httpStatus: number;
+}
+
 export interface TokenRefreshResponse {
   jwtToken: string;
 }

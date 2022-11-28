@@ -7,12 +7,34 @@
   box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 25%);
 }
 
-.register-error > label,
-.register-error > select {
+.register-error>label,
+.register-error>select {
   color: var(--bs-red);
   opacity: 1 !important;
 }
 
 .register-gender-select {
   color: var(--bs-gray-900);
+}
+
+
+.captcha {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.captcha>img {
+  margin-right: 15px;
+}
+
+.captcha-input {
+  max-width: 150px;
+}
+
+.captcha-refresh {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
 }

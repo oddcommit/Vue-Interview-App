@@ -17,4 +17,10 @@ create table if not exists public.user_role (
 	modification_date timestamp NOT NULL
 );
 
+create table if not exists public.captcha (
+	uuid uuid PRIMARY KEY,
+	captcha_text varchar(255) NOT NULL,
+    creation_date timestamp NOT NULL
+);
+
 commit;

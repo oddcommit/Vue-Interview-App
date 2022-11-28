@@ -1,12 +1,13 @@
 package com.tristanruecker.interviewexampleproject.controller;
 
-import com.tristanruecker.interviewexampleproject.config.authentication.JWTParseResultObject;
+import com.tristanruecker.interviewexampleproject.models.objects.Captcha;
 import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
 import com.tristanruecker.interviewexampleproject.models.objects.User;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
 import com.tristanruecker.interviewexampleproject.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,10 +31,16 @@ public class LoginController {
         return loginService.userLogin(user);
     }
 
+
     @PostMapping(value = "/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerUser(@RequestBody User user) {
         loginService.registerUser(user);
+    }
+
+    @GetMapping(value = "/register/captcha")
+    public Captcha registerUser() {
+        return loginService.getCaptcha();
     }
 
     /**

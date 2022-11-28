@@ -23,6 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Set;
 
 @Data
@@ -60,5 +61,12 @@ public class User extends UserEmailAndPassword {
     @ToString.Exclude
     private Set<UserRole> userRoles;
 
+    @Transient
+    @JsonProperty("captcha_uuid")
+    private String captchaUuid;
+
+    @Transient
+    @JsonProperty("captcha_text")
+    private String captchaText;
 
 }

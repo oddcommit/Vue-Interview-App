@@ -11,5 +11,4 @@ public interface UserControllerApi {
     @GET(value = "users")
     Call<List<User>> getAllUsersWithourAuthorization();
 
-
 }
