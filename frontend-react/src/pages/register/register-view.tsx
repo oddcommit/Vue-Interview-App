@@ -288,7 +288,7 @@ const RegisterView = () => {
 
         {registrationSuccessfull &&
           <Alert key="success" variant="success">
-            Registration was successful. Redirected in 5 seconds..
+            Registration was successful. Redirect in 5 seconds..
           </Alert>
         }
         {errorMessage.showError &&
