@@ -9,13 +9,13 @@ import NavbarComponent from "./components/navbar-component";
 
 const RouterComponent = (): ReactElement => {
   const location = useLocation();
-  const history = useNavigate();
+  const navigation = useNavigate();
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   useEffect(() => {
     if (isLoggedIn && location.pathname === "/") {
-      history("/users");
+      navigation("/users");
     }
 
     if (
@@ -23,9 +23,9 @@ const RouterComponent = (): ReactElement => {
       location.pathname !== "/" &&
       location.pathname !== "/register"
     ) {
-      history("/");
+      navigation("/");
     }
-  }, [location, isLoggedIn, history]);
+  }, [location, isLoggedIn, navigation]);
 
   return (
     <>

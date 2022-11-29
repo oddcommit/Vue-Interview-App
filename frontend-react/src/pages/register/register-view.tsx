@@ -5,15 +5,16 @@ import { AxiosErrorMessage } from "../../App";
 import { BootstrapReboot } from 'react-bootstrap-icons';
 import axiosHttp from "../../utils/axios";
 import "./register-view.css";
+import { useNavigate } from "react-router-dom";
 
 
 interface CaptchaResponse {
-  key: string;
   uuid: string;
   captcha_image: string;
 }
 
 interface CaptchaInputData extends CaptchaResponse {
+  key: string;
   captcha_text: string;
 }
 
@@ -37,8 +38,20 @@ interface RegisterFormControl {
   };
 }
 
+interface RegistrationSuccessfull {
+  registrationSuccessfull: boolean;
+  countdownTimer: number;
+}
+
 const RegisterView = () => {
-  const [registrationSuccessfull, setRegistrationSuccessfull] = useState<boolean>(false);
+  const navigation = useNavigate();
+
+  const [registrationSuccessfull, setRegistrationSuccessfull] = useState<RegistrationSuccessfull>({
+    registrationSuccessfull: false,
+    countdownTimer: 5
+  });
+
+  const [countDownTimer, setCountDownTimer] = useState<null | NodeJS.Timer>(null);
 
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     showError: false,
@@ -106,7 +119,8 @@ const RegisterView = () => {
     axiosHttp
       .get("/register/captcha")
       .then((captchaResponse: AxiosResponse<CaptchaResponse>) => {
-        const captcha: CaptchaInputData = { ...captchaResponse.data, "captcha_text": "" };
+        const responseData = captchaResponse.data;
+        const captcha: CaptchaInputData = { ...responseData, "captcha_text": "", "key": responseData.uuid };
         setCaptcha(captcha);
       });
   }
@@ -115,8 +129,19 @@ const RegisterView = () => {
     if (!captcha) {
       refreshCaptcha();
     }
-  }, [refreshCaptcha]);
+  }, [captcha, refreshCaptcha]);
 
+  useEffect(() => {
+    if (registrationSuccessfull.registrationSuccessfull) {
+      const interval = setInterval(() => {
+        if (registrationSuccessfull.countdownTimer == 0) {
+          navigation('/');
+        }
+        setRegistrationSuccessfull({ ...registrationSuccessfull, "countdownTimer": registrationSuccessfull.countdownTimer - 1 })
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [registrationSuccessfull]);
 
   const onChangeCaptchaData = (
     event: ChangeEvent<HTMLInputElement>,
@@ -200,7 +225,7 @@ const RegisterView = () => {
       .post("/register", axiosRegisterObject)
       .then((response) => {
         if (response.status == 201) {
-          setRegistrationSuccessfull(true);
+          setRegistrationSuccessfull({ ...registrationSuccessfull, "registrationSuccessfull": true });
           errorMessage.showError = false;
           setErrorMessage(errorMessage);
         }
@@ -286,9 +311,9 @@ const RegisterView = () => {
           <BootstrapReboot className="captcha-refresh" size={30} onClick={() => refreshCaptcha()} />
         </div>
 
-        {registrationSuccessfull &&
+        {registrationSuccessfull.registrationSuccessfull &&
           <Alert key="success" variant="success">
-            Registration was successful. Redirect in 5 seconds..
+            Registration was successful. Redirect to login in {registrationSuccessfull.countdownTimer} seconds..
           </Alert>
         }
         {errorMessage.showError &&
