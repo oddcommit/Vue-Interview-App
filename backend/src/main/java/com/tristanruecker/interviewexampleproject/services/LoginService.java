@@ -58,7 +58,10 @@ public class LoginService {
 
     public Captcha getCaptcha() {
         try {
-            ImageCaptcha imageCaptcha = new ImageCaptcha.Builder(150, 50).addContent().build();
+            ImageCaptcha imageCaptcha = new ImageCaptcha.Builder(150, 50)
+                    .addContent()
+                    .addBorder()
+                    .build();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(imageCaptcha.getImage(), "png", byteArrayOutputStream);
             byte[] bytes = byteArrayOutputStream.toByteArray();
@@ -113,7 +116,6 @@ public class LoginService {
 
         userRepository.save(user);
         //TODO: Send E-Mail verification link
-
     }
 
     /**
