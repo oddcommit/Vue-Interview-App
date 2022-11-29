@@ -100,7 +100,7 @@ public class LoginService {
         Optional<Captcha> captcha = captchaRepository.findById(UUID.fromString(user.getCaptchaUuid()));
 
         if (captcha.isEmpty()) {
-            throw new CustomException(HttpStatus.TOO_MANY_REQUESTS, TextConstants.CAPTCHA_COULD_NOT_BE_FOUND);
+            throw new CustomException(HttpStatus.TOO_MANY_REQUESTS, TextConstants.CAPTCHA_NOT_VALID_ANYMORE);
         }
 
         if (!user.getCaptchaText().equals(captcha.get().getCaptchaText())) {

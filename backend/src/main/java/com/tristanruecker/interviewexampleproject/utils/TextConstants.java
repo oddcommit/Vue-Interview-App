@@ -15,6 +15,6 @@ public class TextConstants {
     public final static String CANT_REGENERATE_TOKEN = "Sorry, can't regenerate token.";
     public final static String RENEW_TOKEN_USER_NOT_FOUND = "Can't find user.";
     public final static String PASSWORD_AGE_CAN_NOT_BE_EMPTY = "Sorry but the password can not be empty.";
-    public final static String CAPTCHA_COULD_NOT_BE_FOUND = "Sorry but the captcha could not be found on the server.";
+    public final static String CAPTCHA_NOT_VALID_ANYMORE = "Sorry but the captcha is not valid anymore.";
     public final static String CAPTCHA_TEXT_INOUT_DOES_NOT_MATCH_CAPTCHA = "Input of text does not match captcha.";
 }
