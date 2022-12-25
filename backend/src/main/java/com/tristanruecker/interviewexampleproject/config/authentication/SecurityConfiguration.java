@@ -1,7 +1,7 @@
 package com.tristanruecker.interviewexampleproject.config.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Roles;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
 import com.tristanruecker.interviewexampleproject.utils.EnvironmentUtils;
 import com.tristanruecker.interviewexampleproject.utils.JwtUtils;

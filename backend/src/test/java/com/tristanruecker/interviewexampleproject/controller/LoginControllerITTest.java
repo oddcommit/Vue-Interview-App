@@ -3,7 +3,7 @@ package com.tristanruecker.interviewexampleproject.controller;
 
 import com.tristanruecker.interviewexampleproject.base.IntegrationTestBaseClass;
 import com.tristanruecker.interviewexampleproject.base.api.LoginControllerApi;
-import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.UserEmailAndPassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

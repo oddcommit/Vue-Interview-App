@@ -1,9 +1,9 @@
 package com.tristanruecker.interviewexampleproject.base;
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
-import com.tristanruecker.interviewexampleproject.models.objects.UserRole;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Gender;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.UserRole;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Gender;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Roles;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -1,10 +1,10 @@
-package com.tristanruecker.interviewexampleproject.models.objects;
+package com.tristanruecker.interviewexampleproject.models.objects.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Gender;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +23,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Set;
 
 @Data
@@ -60,13 +59,5 @@ public class User extends UserEmailAndPassword {
     @JsonIgnore
     @ToString.Exclude
     private Set<UserRole> userRoles;
-
-    @Transient
-    @JsonProperty("captcha_uuid")
-    private String captchaUuid;
-
-    @Transient
-    @JsonProperty("captcha_text")
-    private String captchaText;
 
 }

@@ -1,7 +1,7 @@
 package com.tristanruecker.interviewexampleproject.utils;
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
-import com.tristanruecker.interviewexampleproject.models.objects.UserRole;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.UserRole;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

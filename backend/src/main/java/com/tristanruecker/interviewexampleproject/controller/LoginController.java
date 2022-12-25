@@ -1,8 +1,8 @@
 package com.tristanruecker.interviewexampleproject.controller;
 
-import com.tristanruecker.interviewexampleproject.models.objects.Captcha;
-import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
-import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.objects.dto.UserRegistrationDTO;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.Captcha;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.UserEmailAndPassword;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
 import com.tristanruecker.interviewexampleproject.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class LoginController {
 
     @PostMapping(value = "/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@RequestBody User user) {
-        loginService.registerUser(user);
+    public void registerUser(@RequestBody UserRegistrationDTO userRegistrationDto) {
+        loginService.registerUser(userRegistrationDto);
     }
 
     @GetMapping(value = "/register/captcha")

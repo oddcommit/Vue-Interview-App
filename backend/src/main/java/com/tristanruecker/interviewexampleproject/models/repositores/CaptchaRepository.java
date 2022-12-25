@@ -1,6 +1,6 @@
 package com.tristanruecker.interviewexampleproject.models.repositores;
 
-import com.tristanruecker.interviewexampleproject.models.objects.Captcha;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.Captcha;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

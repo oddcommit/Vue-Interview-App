@@ -1,6 +1,6 @@
 package com.tristanruecker.interviewexampleproject.chronjobs;
 
-import com.tristanruecker.interviewexampleproject.models.objects.Captcha;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.Captcha;
 import com.tristanruecker.interviewexampleproject.models.repositores.CaptchaRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;

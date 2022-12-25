@@ -2,7 +2,7 @@ package com.tristanruecker.interviewexampleproject.authentication;
 
 import com.tristanruecker.interviewexampleproject.base.IntegrationTestBaseClass;
 import com.tristanruecker.interviewexampleproject.base.api.UserControllerApi;
-import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

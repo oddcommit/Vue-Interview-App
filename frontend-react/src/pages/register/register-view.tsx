@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { ChangeEvent, useEffect, useState } from "react";
+import {ChangeEvent, useCallback, useEffect, useState} from "react";
 import { Alert, Button, FloatingLabel, Form } from "react-bootstrap";
-import { AxiosErrorMessage } from "../../App";
+import { AxiosErrorMessage, ErrorField } from "../../App";
 import { BootstrapReboot } from 'react-bootstrap-icons';
 import axiosHttp from "../../utils/axios";
 import "./register-view.css";
@@ -38,20 +38,18 @@ interface RegisterFormControl {
   };
 }
 
-interface RegistrationSuccessfull {
-  registrationSuccessfull: boolean;
+interface RegistrationSuccessful {
+  registrationSuccessful: boolean;
   countdownTimer: number;
 }
 
 const RegisterView = () => {
   const navigation = useNavigate();
 
-  const [registrationSuccessfull, setRegistrationSuccessfull] = useState<RegistrationSuccessfull>({
-    registrationSuccessfull: false,
+  const [registrationSuccessful, setRegistrationSuccessful] = useState<RegistrationSuccessful>({
+    registrationSuccessful: false,
     countdownTimer: 5
   });
-
-  const [countDownTimer, setCountDownTimer] = useState<null | NodeJS.Timer>(null);
 
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     showError: false,
@@ -115,7 +113,7 @@ const RegisterView = () => {
 
   const [captcha, setCaptcha] = useState<CaptchaInputData | null>(null);
 
-  const refreshCaptcha = () => {
+  const refreshCaptcha = useCallback(() => {
     axiosHttp
       .get("/register/captcha")
       .then((captchaResponse: AxiosResponse<CaptchaResponse>) => {
@@ -123,7 +121,7 @@ const RegisterView = () => {
         const captcha: CaptchaInputData = { ...responseData, "captcha_text": "", "key": responseData.uuid };
         setCaptcha(captcha);
       });
-  }
+  }, [])
 
   useEffect(() => {
     if (!captcha) {
@@ -132,16 +130,16 @@ const RegisterView = () => {
   }, [captcha, refreshCaptcha]);
 
   useEffect(() => {
-    if (registrationSuccessfull.registrationSuccessfull) {
+    if (registrationSuccessful.registrationSuccessful) {
       const interval = setInterval(() => {
-        if (registrationSuccessfull.countdownTimer == 0) {
+        if (registrationSuccessful.countdownTimer === 0) {
           navigation('/');
         }
-        setRegistrationSuccessfull({ ...registrationSuccessfull, "countdownTimer": registrationSuccessfull.countdownTimer - 1 })
+        setRegistrationSuccessful({ ...registrationSuccessful, "countdownTimer": registrationSuccessful.countdownTimer - 1 })
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [registrationSuccessfull]);
+  }, [navigation, registrationSuccessful]);
 
   const onChangeCaptchaData = (
     event: ChangeEvent<HTMLInputElement>,
@@ -185,33 +183,9 @@ const RegisterView = () => {
   };
 
   const register = () => {
-    const registeredFormControlsCopy: Array<RegisterFormControl> = [
-      ...registeredFormControls,
-    ];
-
-    registeredFormControlsCopy.forEach((registeredFormControl) => {
-      if (!registeredFormControl.value) {
-        registeredFormControl.error.isInvalid = true;
-      }
-
-      if (
-        registeredFormControl.key === "age" &&
-        !Number(registeredFormControl.value)
-      ) {
-        registeredFormControl.error.isInvalid = true;
-      }
-    });
-
-    if (
-      registeredFormControlsCopy.filter((e) => e.error.isInvalid).length > 0
-    ) {
-      setRegisteredFormControls(registeredFormControlsCopy);
-      return;
-    }
-
     const axiosRegisterObject: RegisterObject = {};
 
-    registeredFormControlsCopy.forEach(
+    registeredFormControls.forEach(
       (registeredFormControl: RegisterFormControl) => {
         const { key, value } = registeredFormControl;
 
@@ -224,22 +198,55 @@ const RegisterView = () => {
     axiosHttp
       .post("/register", axiosRegisterObject)
       .then((response) => {
-        if (response.status == 201) {
-          setRegistrationSuccessfull({ ...registrationSuccessfull, "registrationSuccessfull": true });
+        if (response.status === 201) {
+          setRegistrationSuccessful({ ...registrationSuccessful, "registrationSuccessful": true });
           errorMessage.showError = false;
           setErrorMessage(errorMessage);
         }
       })
       .catch((error: AxiosError<AxiosErrorMessage>) => {
-        const errorMessageCopy: ErrorMessage = {
-          ...errorMessage,
-        };
+          const axiosError: AxiosResponse<AxiosErrorMessage> | undefined = error.response;
+          if (axiosError) {
+              const data = axiosError.data;
+              const errorMessageString = data.errorMessage;
 
-        errorMessageCopy.showError = true;
-        errorMessageCopy.error = error.response?.data.errorMessage;
-        setErrorMessage(errorMessageCopy);
+              if (errorMessageString) {
+                  showErrorMessage(errorMessageString);
+              }
+
+              const errorFieldArray: Array<ErrorField> | undefined = data.errorFields;
+              if (errorFieldArray) {
+                  const registeredFormControlsCopy: Array<RegisterFormControl> = [
+                      ...registeredFormControls,
+                  ]
+                  errorFieldArray.forEach(errorField => {
+                      let registeredFormControl = registeredFormControlsCopy.find(registeredFormControl => registeredFormControl.key === errorField.field);
+                      if (registeredFormControl) {
+                          let registeredFormControlError = registeredFormControl.error;
+                          registeredFormControlError.isInvalid = true;
+                          registeredFormControlError.errorMessage = errorField.errorMessage;
+                      } else {
+                          console.error(`Error field for: ${errorField.field} not found with potential error message: ${errorField.errorMessage}`)
+                      }
+                  });
+                  setRegisteredFormControls(registeredFormControlsCopy);
+              }
+          } else {
+              showErrorMessage("Something went terribly wrong. Please contact us!");
+          }
       });
   };
+
+
+    const showErrorMessage = (
+        errorMessageString: string): void => {
+        errorMessage.showError = true;
+        errorMessage.error = errorMessageString;
+        setErrorMessage({
+            ...errorMessage,
+        });
+    };
+
 
   return (
     <>
@@ -311,9 +318,9 @@ const RegisterView = () => {
           <BootstrapReboot className="captcha-refresh" size={30} onClick={() => refreshCaptcha()} />
         </div>
 
-        {registrationSuccessfull.registrationSuccessfull &&
+        {registrationSuccessful.registrationSuccessful &&
           <Alert key="success" variant="success">
-            Registration was successful. Redirect to login in {registrationSuccessfull.countdownTimer} seconds..
+            Registration was successful. Redirect to login in {registrationSuccessful.countdownTimer} seconds..
           </Alert>
         }
         {errorMessage.showError &&

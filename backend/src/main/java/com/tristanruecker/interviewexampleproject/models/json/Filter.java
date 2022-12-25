@@ -1,7 +1,7 @@
 package com.tristanruecker.interviewexampleproject.models.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Gender;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Gender;
 import lombok.Data;
 
 @Data

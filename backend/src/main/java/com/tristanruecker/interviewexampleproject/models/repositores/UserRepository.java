@@ -1,6 +1,6 @@
 package com.tristanruecker.interviewexampleproject.models.repositores;
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

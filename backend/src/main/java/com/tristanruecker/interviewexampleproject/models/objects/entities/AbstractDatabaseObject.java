@@ -1,4 +1,4 @@
-package com.tristanruecker.interviewexampleproject.models.objects;
+package com.tristanruecker.interviewexampleproject.models.objects.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;

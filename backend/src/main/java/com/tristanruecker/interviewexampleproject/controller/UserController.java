@@ -1,7 +1,7 @@
 package com.tristanruecker.interviewexampleproject.controller;
 
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
 import com.tristanruecker.interviewexampleproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,8 @@
 package com.tristanruecker.interviewexampleproject.services;
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
 import com.tristanruecker.interviewexampleproject.models.repositores.UserRepository;
 import com.tristanruecker.interviewexampleproject.utils.CertificateUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

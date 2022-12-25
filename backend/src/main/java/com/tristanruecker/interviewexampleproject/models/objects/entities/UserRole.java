@@ -1,7 +1,7 @@
-package com.tristanruecker.interviewexampleproject.models.objects;
+package com.tristanruecker.interviewexampleproject.models.objects.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tristanruecker.interviewexampleproject.models.objects.types.Roles;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.types.Roles;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

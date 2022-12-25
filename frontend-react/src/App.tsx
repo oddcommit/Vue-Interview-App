@@ -16,9 +16,15 @@ import {
 } from "./authentication/authentication-thunk";
 
 
+export interface ErrorField {
+  "field": string,
+  "errorMessage": string
+}
+
 export interface AxiosErrorMessage {
-  errorMessage: string;
   httpStatus: number;
+  errorMessage?: string;
+  errorFields?: Array<ErrorField>;
 }
 
 export interface TokenRefreshResponse {

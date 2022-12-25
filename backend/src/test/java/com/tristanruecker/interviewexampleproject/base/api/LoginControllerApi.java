@@ -1,7 +1,7 @@
 package com.tristanruecker.interviewexampleproject.base.api;
 
-import com.tristanruecker.interviewexampleproject.models.objects.User;
-import com.tristanruecker.interviewexampleproject.models.objects.UserEmailAndPassword;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.User;
+import com.tristanruecker.interviewexampleproject.models.objects.entities.UserEmailAndPassword;
 import com.tristanruecker.interviewexampleproject.models.response.UserLoggedInResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
