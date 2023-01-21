@@ -19,9 +19,12 @@
         <release.type>SNAPSHOT</release.type>
         <java.version>11</java.version>
         <retrofit.version>2.9.0</retrofit.version>
+        <skipTests>false</skipTests>
+        <skipIntegrationTests>false</skipIntegrationTests>
     </properties>
 
     <dependencies>
+        <!-- Spring boot dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -46,8 +49,6 @@
             <artifactId>spring-security-web</artifactId>
         </dependency>
 
-
-        <!-- Database and related dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,9 +58,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Spring boot dependencies end -->
 
+        <!-- Database and related dependencies-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.8.1</version>
+        </dependency>
 
-        <!-- Jackson -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.0</version>
+        </dependency>
+        <!-- Database and related dependencies end -->
+
+        <!-- Tools for JSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -72,7 +87,7 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-        <!-- Jackson end -->
+        <!-- Tools for JSON end -->
 
         <!-- JJWT Library see https://github.com/jwtk/jjwt -->
         <dependency>
@@ -104,39 +119,6 @@
             <artifactId>commons-validator</artifactId>
             <version>1.7</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>9.8.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.5.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.logicsquad</groupId>
-            <artifactId>nanocaptcha</artifactId>
-            <version>1.3</version>
-        </dependency>
-
-        <!-- Testing libraries-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Testing libraries end -->
 
         <!-- Various other libraries -->
         <dependency>
@@ -175,8 +157,26 @@
             <version>${retrofit.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>net.logicsquad</groupId>
+            <artifactId>nanocaptcha</artifactId>
+            <version>1.3</version>
+        </dependency>
         <!-- Various other libraries end -->
+
+        <!-- Testing libraries-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Testing libraries end -->
     </dependencies>
 
     <build>
@@ -199,6 +199,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <!-- Integration tests will be ignored if it is executed as the following ./mvnw install -D skipTests -->
+                    <skipTests>${skipTests}</skipTests>
+                    <skipTests>${skipIntegrationTests}</skipTests>
                     <excludes>
                         <exclude>**/*ITTest.java</exclude>
                     </excludes>
@@ -222,25 +225,59 @@
                 </executions>
             </plugin>
 
-            <!-- This plugin is used is if the user wants to run integration tests locally on any computer.
-                 The script is checking if docker is running with the related containers, who are needed
-                 to run the integration tests.
-                 A script for windows has to be implemented in the future.
-                 See: https://stackoverflow.com/questions/14809931/maven-calls-external-script-on-both-linux-and-windows-platforms
-                 To run the integration tests for windows you have to manually make sure that docker is running
-                 and you executed the docker-compose up in this directory.
+            <!-- This plugin is used to automatically start scripts.
+            The script which is being executed is starting a docker container that is necessary for running the integration tests.
+            Depending on your OS it will start a powershell script or a bash script.
+            For more information see: See: https://stackoverflow.com/questions/14809931/maven-calls-external-script-on-both-linux-and-windows-platforms
              -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <!-- WARNING: Higher versions of this plugin are not starting docker currently-->
+                <version>3.0.0</version>
 
+
+                <configuration>
+                    <skip>${skipTests}</skip>
+                    <skip>${skipIntegrationTests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>execute-local-integration-tests</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <executable>${script.executor}</executable>
+                            <!-- Depending on your OS this starting a powershell script or a bash script.
+                            See profile ids: <id>windows/unix/mac</id> -->
+                            <commandlineArgs>${script.to.execute}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>execute-local-integration-tests-cleanup</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <executable>${script.executor}</executable>
+                            <commandlineArgs>${post.script.to.execute}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
 
     <profiles>
+        <!-- https://stackoverflow.com/questions/19023109/values-for-os-family-in-maven-profile-activation-condition -->
         <profile>
-            <id>Windows</id>
+            <id>windows</id>
             <activation>
                 <os>
-                    <!-- https://stackoverflow.com/questions/19023109/values-for-os-family-in-maven-profile-activation-condition -->
                     <family>windows</family>
                 </os>
             </activation>
@@ -283,47 +320,16 @@
             </properties>
         </profile>
         <profile>
-            <id>default-profile</id>
+            <!-- Automatically executes integration tests -->
+            <id>automatically-execute-integration-tests</id>
             <activation>
                 <property>
-                    <name>!skipIntegrationTests</name>
+                    <name>!someNoneExistentProperty</name>
                 </property>
             </activation>
             <build>
+                <!-- Executes goal defined in 'exec-maven-plugin' under section <build> ... <plugins>  -->
                 <defaultGoal>exec:exec</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <!-- Higher versions of this plugin are not starting docker currenty-->
-                        <version>3.0.0</version>
-
-                        <executions>
-                            <execution>
-                                <id>execute-local-integration-tests</id>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <executable>${script.executor}</executable>
-                                    <commandlineArgs>${script.to.execute}</commandlineArgs>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>execute-local-integration-tests-cleanup</id>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <phase>post-integration-test</phase>
-                                <configuration>
-                                    <executable>${script.executor}</executable>
-                                    <commandlineArgs>${post.script.to.execute}</commandlineArgs>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
             </build>
         </profile>
     </profiles>

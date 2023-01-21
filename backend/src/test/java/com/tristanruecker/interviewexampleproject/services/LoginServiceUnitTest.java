@@ -101,6 +101,7 @@ public class LoginServiceUnitTest extends UnitTestBaseClass {
     private UserRegistrationDTO getBaseUserRegistrationDto() {
         UserRegistrationDTO user = new UserRegistrationDTO();
         user.setEmail("hello@test.de");
+        user.setName(UUID.randomUUID().toString());
         user.setAge("30");
         user.setGender(Gender.FEMALE.toString());
         user.setCaptchaUuid(CAPTCHA_UUID);
