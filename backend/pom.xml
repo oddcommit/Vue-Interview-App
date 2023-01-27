@@ -201,7 +201,6 @@
                 <configuration>
                     <!-- Integration tests will be ignored if it is executed as the following ./mvnw install -D skipTests -->
                     <skipTests>${skipTests}</skipTests>
-                    <skipTests>${skipIntegrationTests}</skipTests>
                     <excludes>
                         <exclude>**/*ITTest.java</exclude>
                     </excludes>
