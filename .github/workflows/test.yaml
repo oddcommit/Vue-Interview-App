@@ -26,7 +26,12 @@ jobs:
 
       - name: Package the application
         working-directory: backend
-        run: mvn package -DskipIntegrationTests=true
+        run: |
+          echo "-----------------------------------"
+          echo "Using maven version:"
+          sh -c "mvn -v | grep 'Apache Maven'"
+          echo "-----------------------------------"
+          mvn package -DskipIntegrationTests=true
 
       - name: Run maven tests
         working-directory: backend
