@@ -1,0 +1,31 @@
+name: Test interview-example-project
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+          architecture: x64
+          cache: 'maven'
+
+      - name: Package the application
+        run: mvn package -DskipIntegrationTests=true
+
+      - name: Run maven tests
+        run: mvn test -DskipIntegrationTests=true
