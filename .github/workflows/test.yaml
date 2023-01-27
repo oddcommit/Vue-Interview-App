@@ -25,7 +25,9 @@ jobs:
           cache: 'maven'
 
       - name: Package the application
+        working-directory: backend
         run: mvn package -DskipIntegrationTests=true
 
       - name: Run maven tests
+        working-directory: backend
         run: mvn test -DskipIntegrationTests=true
