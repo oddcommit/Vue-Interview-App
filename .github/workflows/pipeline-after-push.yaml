@@ -1,9 +1,9 @@
 name: Run standard build pipeline after push for interview-example-project
 
-on:
-  push:
-    branches:
-      - master
+#on:
+#  push:
+#    branches:
+#      - master
 
 jobs:
   build-backend-image:
