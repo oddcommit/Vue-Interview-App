@@ -25,6 +25,7 @@ jobs:
       - name: Prepare pom file for release...
         working-directory: deployment_tools
         run: |
+          git update-index --chmod=700 prepare_backend_image.sh
           ./prepare_backend_image.sh
       - name: Build the application
         working-directory: backend
