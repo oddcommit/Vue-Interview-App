@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Build version information
-        run: echo "Trying to build new pushed version ${{ ref }}"
+        run: echo "Trying to build new pushed version ${{ github.ref }}"
       - name: Checkout code
         uses: actions/checkout@v3
         with:
