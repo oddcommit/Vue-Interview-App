@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+strategy:
+  matrix:
+    job: [ setup-backend-environment, build-backend-environment, run-backend-tests ]
+
 jobs:
   setup-backend-environment:
     runs-on: ubuntu-latest
@@ -36,7 +40,7 @@ jobs:
           mvn package -DskipTests=true
   run-backend-tests:
     runs-on: ubuntu-latest
-    needs: [setup-backend-environment]
+    needs: [build-backend-environment]
     steps:
       - name: Run maven tests
         working-directory: backend
