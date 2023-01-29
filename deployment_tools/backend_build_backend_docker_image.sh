@@ -23,8 +23,8 @@ create_backend_docker_file() {
     docker tag $backendTagName:"$projectBackendVersion" $dockerHubAccount/$backendTagName:latest
     echo "Tagging successful"
     echo "Pushing backend image to docker hub..."
-    docker push $dockerHubAccount/$backendTagName:"$projectBackendVersion"
-    docker push $dockerHubAccount/$backendTagName:latest
+#    docker push $dockerHubAccount/$backendTagName:"$projectBackendVersion"
+#    docker push $dockerHubAccount/$backendTagName:latest
     echo "Push successful"
     cd "$scriptDirectory" || exit 1
 }
