@@ -45,8 +45,7 @@ jobs:
           mvn package -DskipTests=true
           mvn test -DskipIntegrationTests=true
       - name: Upload '.jar' artifact to use it in other job
-        working-directory: backend/target
         uses: actions/upload-artifact@v3
         with:
           name: interview-example-project
-          path: interview-example-project*.jar
+          path: backend/target/interview-example-project*.jar
