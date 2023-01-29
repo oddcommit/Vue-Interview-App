@@ -6,15 +6,13 @@ on:
       - master
 
 jobs:
-  setup-backend-environment:
-    runs-on: ubuntu-latest
-
+  build-backend-image:
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           ref: master
-
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
@@ -22,20 +20,14 @@ jobs:
           java-version: '11'
           architecture: x64
           cache: 'maven'
-  build-backend-environment:
-    needs: [setup-backend-environment]
-    steps:
       - name: Build the application
         working-directory: backend
         run: |
-          echo "-----------------------------------"
+          echo "--------------"
           echo "Using maven version:"
           sh -c "mvn -v | grep 'Apache Maven'"
-          echo "-----------------------------------"
+          echo "--------------"
           mvn package -DskipTests=true
-  run-backend-tests:
-    needs: [build-backend-environment]
-    steps:
       - name: Run maven tests
         working-directory: backend
         run: mvn test -DskipIntegrationTests=true
