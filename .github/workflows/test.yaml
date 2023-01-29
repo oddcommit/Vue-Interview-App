@@ -27,7 +27,6 @@ jobs:
           architecture: x64
           cache: 'maven'
   build-backend-environment:
-    runs-on: ubuntu-latest
     needs: [setup-backend-environment]
     steps:
       - name: Build the application
@@ -39,7 +38,6 @@ jobs:
           echo "-----------------------------------"
           mvn package -DskipTests=true
   run-backend-tests:
-    runs-on: ubuntu-latest
     needs: [build-backend-environment]
     steps:
       - name: Run maven tests
