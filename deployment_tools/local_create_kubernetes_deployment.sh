@@ -1,6 +1,5 @@
-relDir="$(dirname -- "$0"; )";
-cd "$relDir" || exit 1;
-scriptDirectory="$( pwd; )";
+source ./helper_tools.sh
+scriptDirectory=$(get_relative_path_of_script_directory)
 
 kubernetesFolder=$scriptDirectory/../k8s
 

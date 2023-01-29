@@ -1,10 +1,8 @@
-# Normally this script is running on an jenkins server or somewhere else
-echo "Starting to build docker container releases and push them to docker hub..."
+echo "Starting to build docker container releases and push them to docker hub from local..."
+source ./helper_tools.sh
 
 dockerHubAccount=21321321421441
-relDir="$(dirname -- "$0"; )";
-cd "$relDir" || exit 1;
-scriptDirectory="$( pwd; )";
+scriptDirectory=$(get_relative_path_of_script_directory)
 
 # Build backend
 backendTagName=interview-example-project-backend
@@ -14,15 +12,6 @@ backendDockerFile=$backendFolder/Dockerfile
 
 projectBackendVersion="$(cat "$pomFile" | grep "<project.version>" | grep -Eo "[0-9]+.[0-9]+.[0-9]+")"
 echo "Backend project version is $projectBackendVersion"
-
-replaceText() {
-    # Mac got a slightly different SED (FreeBSD sed)
-    if [[ "$(uname)" == "Darwin" ]]; then
-      sed -i '' "s/$1/$2/g" "$3"
-    else
-      sed -i "s/$1/$2/g" "$3"
-    fi
-}
 
 build_backend_maven_project() {
     echo "Prepare 'pom.xml' file for production..."
