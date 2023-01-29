@@ -6,7 +6,7 @@ scriptDirectory=$(get_relative_path_of_script_directory)
 backendTagName=interview-example-project-backend
 backendFolder=$scriptDirectory/../backend
 pomFile=$backendFolder/pom.xml
-projectBackendVersion="$(cat "$pomFile" | grep "<project.version>" | grep -Eo "[0-9]+.[0-9]+.[0-9]+")"
+projectBackendVersion="$(cat " " | grep "<project.version>" | grep -Eo "[0-9]+.[0-9]+.[0-9]+")"
 
 
 create_backend_docker_file() {
