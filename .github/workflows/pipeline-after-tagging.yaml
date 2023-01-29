@@ -1,9 +1,16 @@
 name: Create new deployment for interview-example-project
 
+#on:
+#  push:
+#    tags:
+#      - '*'
+
+
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - master
+
 
 jobs:
   build-backend-image:
