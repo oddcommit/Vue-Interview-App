@@ -50,6 +50,7 @@ jobs:
           name: interview-example-project
           path: backend/target/interview-example-project*.jar
   build-backend-docker-image:
+    needs: [build-backend-image]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
