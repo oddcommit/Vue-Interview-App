@@ -34,7 +34,7 @@ jobs:
         run: |
           git update-index --chmod=+x prepare_backend_image.sh
           git update-index --chmod=+x helper_tools.sh
-          ./prepare_backend_image.sh
+          bash ./prepare_backend_image.sh
       - name: Build the application
         working-directory: backend
         run: |
