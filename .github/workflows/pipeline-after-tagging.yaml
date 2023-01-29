@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Build version information
-        run: echo "Trying to build new pushed version ${{ github.ref }}"
+        run: echo "Trying to build new pushed version ${{ github.ref_name }}"
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -32,10 +32,10 @@ jobs:
       - name: Prepare pom file for release...
         working-directory: deployment_tools
         run: |
-          git update-index --chmod=+x prepare_backend_image.sh
+          git update-index --chmod=+x backend_prepare_build.sh
           git update-index --chmod=+x helper_tools.sh
-          bash ./prepare_backend_image.sh
-      - name: Build the application
+          bash ./backend_prepare_build.sh
+      - name: Build and test the application
         working-directory: backend
         run: |
           echo "--------------"
@@ -43,6 +43,4 @@ jobs:
           sh -c "mvn -v | grep 'Apache Maven'"
           echo "--------------"
           mvn package -DskipTests=true
-      - name: Run maven tests
-        working-directory: backend
-        run: mvn test -DskipIntegrationTests=true
+          mvn test -DskipIntegrationTests=true
