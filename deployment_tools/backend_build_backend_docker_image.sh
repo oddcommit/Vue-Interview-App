@@ -7,6 +7,7 @@ backendTagName=interview-example-project-backend
 backendFolder=$scriptDirectory/../backend
 pomFile=$backendFolder/pom.xml
 projectBackendVersion="$(cat "$pomFile" | grep "<project.version>" | grep -Eo "[0-9]+.[0-9]+.[0-9]+")"
+backendDockerFile=$backendFolder/Dockerfile
 
 
 create_backend_docker_file() {
