@@ -67,3 +67,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build docker image and push to docker hub...
+        working-directory: deployment_tools
+        run: |
+          git update-index --chmod=+x backend_build_backend_docker_image.sh
+          git update-index --chmod=+x helper_tools.sh
+          bash ./backend_build_backend_docker_image.sh
