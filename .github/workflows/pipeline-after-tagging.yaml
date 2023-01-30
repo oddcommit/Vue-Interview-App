@@ -98,6 +98,8 @@ jobs:
           echo "--------------"
           npm config get registry
           echo "$( pwd; )";
+          npm i -g hello-world-npm
+          hello-world-npm
           npm install
       - name: Upload 'dist' folder to use it in other job
         uses: actions/upload-artifact@v3
