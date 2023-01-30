@@ -96,8 +96,8 @@ jobs:
           echo "Run npm:"
           sh -c "node -v"
           echo "--------------"
-          npm install --userconfig=/path/.npmrcpipeline
-          npm run build --userconfig=/path/.npmrcpipeline
+          npm install --userconfig=.npmrcpipeline
+          npm run build --userconfig=.npmrcpipeline
       - name: Upload 'dist' folder to use it in other job
         uses: actions/upload-artifact@v3
         with:
