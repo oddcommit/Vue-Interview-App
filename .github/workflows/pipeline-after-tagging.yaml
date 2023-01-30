@@ -90,6 +90,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend-react/package-lock.json
       - name: Run install and build
+        working-directory: frontend-react
         run: |
           echo "--------------"
           echo "Run npm:"
