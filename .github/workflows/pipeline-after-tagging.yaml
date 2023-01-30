@@ -74,11 +74,11 @@ jobs:
           git update-index --chmod=+x helper_tools.sh
           bash ./backend_build_backend_docker_image.sh
 
-  build-frontend-image:
+  build-react-frontend-image:
     runs-on: ubuntu-22.04
     steps:
       - name: Build version information
-        run: echo "Trying to build frontend with new pushed version ${{ github.ref_name }}"
+        run: echo "Trying to build react frontend with new pushed version ${{ github.ref_name }}"
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -88,6 +88,7 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: frontend-react/package-lock.json
       - name: Run install and build
         run: |
           echo "--------------"
@@ -101,8 +102,8 @@ jobs:
         with:
           name: interview-example-project-frontend
           path: frontend-react/build/
-  build-frontend-docker-image:
-    needs: [build-frontend-image]
+  build-react-frontend-docker-image:
+    needs: [build-react-frontend-image]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -122,6 +123,6 @@ jobs:
       - name: Build docker image and push to docker hub...
         working-directory: deployment_tools
         run: |
-          git update-index --chmod=+x backend_build_backend_docker_image.sh
+          git update-index --chmod=+x frontend_build_image.sh
           git update-index --chmod=+x helper_tools.sh
-          bash ./backend_build_backend_docker_image.sh
+          bash ./frontend_build_image.sh
