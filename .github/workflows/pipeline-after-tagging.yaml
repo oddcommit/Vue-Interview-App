@@ -87,6 +87,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: 'npm'
+          cache-dependency-path: frontend-react/package-lock.json
       - name: Run install and build
         working-directory: frontend-react
         run: |
@@ -95,11 +97,8 @@ jobs:
           sh -c "node -v"
           echo "--------------"
           npm config get registry
-          echo "$( pwd; )";
-          npm i -g hello-world-npm
-          echo "hello"
-          hello-world-npm
-          npm install
+          npm install --userconfig=.npmrcpipeline
+          npm run build --userconfig=.npmrcpipeline
       - name: Upload 'dist' folder to use it in other job
         uses: actions/upload-artifact@v3
         with:
