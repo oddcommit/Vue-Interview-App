@@ -86,7 +86,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: 'npm'
           cache-dependency-path: frontend-react/package-lock.json
       - name: Run install and build
