@@ -96,6 +96,7 @@ jobs:
           echo "Run npm:"
           sh -c "node -v"
           echo "--------------"
+          npm config get registry
           npm install --userconfig=.npmrcpipeline
           npm run build --userconfig=.npmrcpipeline
       - name: Upload 'dist' folder to use it in other job
