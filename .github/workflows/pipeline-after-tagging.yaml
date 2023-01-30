@@ -96,8 +96,8 @@ jobs:
           echo "Run npm:"
           sh -c "node -v"
           echo "--------------"
-          npm install
-          npm run build
+          npm install --registry=https://registry.npmjs.org/ 
+          npm run build --registry=https://registry.npmjs.org/
       - name: Upload 'dist' folder to use it in other job
         uses: actions/upload-artifact@v3
         with:
