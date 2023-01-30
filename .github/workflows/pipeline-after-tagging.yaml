@@ -87,8 +87,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
-          cache-dependency-path: frontend-react/package-lock.json
       - name: Run install and build
         working-directory: frontend-react
         run: |
