@@ -99,6 +99,7 @@ jobs:
           npm config get registry
           echo "$( pwd; )";
           npm i -g hello-world-npm
+          echo "hello"
           hello-world-npm
           npm install
       - name: Upload 'dist' folder to use it in other job
