@@ -19,8 +19,8 @@ create_react_frontend_docker_file() {
     docker tag $frontendTagName:"$projectFrontendVersion" $dockerHubAccount/$frontendTagName:latest
     echo "Tagging frontend successful"
     echo "Pushing image to docker hub..."
-#    docker push $dockerHubAccount/$frontendTagName:"$projectFrontendVersion"
-#    docker push $dockerHubAccount/$frontendTagName:latest
+    docker push $dockerHubAccount/$frontendTagName:"$projectFrontendVersion"
+    docker push $dockerHubAccount/$frontendTagName:latest
     echo "Push successful"
     cd "$scriptDirectory" || exit 1
 }
