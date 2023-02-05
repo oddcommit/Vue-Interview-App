@@ -20,6 +20,8 @@ jobs:
           java-version: '11'
           architecture: x64
           cache: 'maven'
+      - name: Docker version
+        run: docker compose version
       - name: Build the application
         working-directory: backend
         run: |
