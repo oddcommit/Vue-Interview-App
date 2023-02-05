@@ -22,14 +22,11 @@ jobs:
           cache: 'maven'
       - name: Docker version
         run: docker compose version
-      - name: Build the application
+      - name: Build and test the application
         working-directory: backend
         run: |
           echo "--------------"
           echo "Using maven version:"
           sh -c "mvn -v | grep 'Apache Maven'"
           echo "--------------"
-          mvn package -DskipTests=true
-      - name: Run maven tests
-        working-directory: backend
-        run: mvn test -DskipIntegrationTests=true
+          mvn package
