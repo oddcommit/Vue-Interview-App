@@ -1,22 +1,30 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: backend-api-deployment
+  name: postgres
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      component: backend-api
+      component: postgres
+  serviceName: postgres
   template:
     metadata:
       labels:
-        component: backend-api
+        component: postgres
     spec:
+      volumes:
+        - name: postgres-pvc
+          persistentVolumeClaim:
+            claimName: postgres-pvc
       containers:
-        - name: backend-api
-          image: 21321321421441/interview-example-project-backend:latest
+        - name: postgres
+          image: docker.io/postgres:15.1
           ports:
-            - containerPort: 4667
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pvc
           env:
             - name: POSTGRES_DB
               valueFrom:
@@ -33,5 +41,11 @@ spec:
                 secretKeyRef:
                   name: database-secret
                   key: password
-            - name: POSTGRES_HOST
-              value: postgres-cluster-ip-service.default.svc.cluster.local
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 120M

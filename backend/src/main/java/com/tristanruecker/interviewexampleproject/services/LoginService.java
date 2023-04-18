@@ -184,6 +184,7 @@ public class LoginService {
         }
 
         Optional<String> jwtToken = certificateUtils.createJWTToken(userFromDatabase);
+
         if (jwtToken.isEmpty()) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, TextConstants.CANT_OBTAIN_JWT_TOKEN, null);
         }

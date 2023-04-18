@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./helper_tools.sh
 
-dockerHubAccount=21321321421441
+dockerHubAccount=${{ secrets.DOCKERHUB_USERNAME }}
 scriptDirectory=$(get_relative_path_of_script_directory)
 frontendTagName=interview-example-project-frontend
 frontendReactFolder=$scriptDirectory/../frontend-react

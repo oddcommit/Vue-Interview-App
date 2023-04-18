@@ -15,8 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -54,7 +52,7 @@ public class CertificateUtils {
 
 
             JwtBuilder builder = Jwts.builder()
-                    .setId(userEmail + "-" + UUID.randomUUID().toString())
+                    .setId(userEmail + "-" + UUID.randomUUID())
                     .setIssuedAt(Date.from(instant))
                     .setExpiration(Date.from(expirationInstant))
                     .setSubject(userEmail)
@@ -80,8 +78,8 @@ public class CertificateUtils {
 
     public Optional<PublicKey> readPublicKey() {
         try {
-            Resource resource = new ClassPathResource("security/jwt/public_key.der");
-            byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getFile().toURI()));
+            InputStream inputStream = new ClassPathResource("security/jwt/public_key.der").getInputStream();
+            byte[] keyBytes = inputStream.readAllBytes();
             X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return Optional.ofNullable(kf.generatePublic(spec));
@@ -92,8 +90,8 @@ public class CertificateUtils {
     }
 
     private Key readPrivateKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        Resource resource = new ClassPathResource("security/jwt/private_key.der");
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getFile().toURI()));
+        InputStream inputStream = new ClassPathResource("security/jwt/private_key.der").getInputStream();
+        byte[] keyBytes = inputStream.readAllBytes();
         PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(keySpecPKCS8);

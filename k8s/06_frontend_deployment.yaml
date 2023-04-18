@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: frontend-react
-          image: 21321321421441/interview-example-project-frontend:latest
+          image: docker.io/21321321421441/interview-example-project-frontend:latest
           ports:
             - containerPort: 80
