@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+
 jobs:
   build-backend-image:
     runs-on: ubuntu-22.04
