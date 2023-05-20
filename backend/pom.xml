@@ -15,7 +15,7 @@
     <description>Demo project for an interview example project</description>
 
     <properties>
-        <project.version>1.2.5</project.version>
+        <project.version>1.2.6</project.version>
         <release.type>SNAPSHOT</release.type>
         <java.version>17</java.version>
         <retrofit.version>2.9.0</retrofit.version>
