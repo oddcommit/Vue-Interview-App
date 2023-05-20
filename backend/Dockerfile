@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jre-hotspot
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java17-22.3.2
 RUN mkdir /opt/app
 COPY target/interview-example-project-{project_version}-RELEASE.jar /opt/app
 WORKDIR /opt/app

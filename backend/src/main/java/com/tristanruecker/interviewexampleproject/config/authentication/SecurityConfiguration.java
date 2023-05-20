@@ -8,19 +8,18 @@ import com.tristanruecker.interviewexampleproject.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Configuration
+public class SecurityConfiguration  {
 
     @Value("${security.disabled.exclude.pattern}")
     private String[] securityExclusionPattern;
@@ -37,22 +36,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private EnvironmentUtils environmentUtils;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Autowired AuthenticationConfiguration authenticationConfiguration;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String[] roles = {Roles.USER.toString(), Roles.SUPERADMIN.toString()};
-        http.cors().and()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(securityExclusionPattern).permitAll()
-                .antMatchers("/**")
-                .hasAnyAuthority(roles)
-                .anyRequest().authenticated()
+
+        http.cors()
+                .and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManagerBean(),
+                .authorizeHttpRequests(e -> e.requestMatchers(securityExclusionPattern).permitAll())
+                .authorizeHttpRequests(e -> e.requestMatchers("/**").hasAnyAuthority(roles).anyRequest().authenticated())
+                .addFilter(new JwtAuthorizationFilter(authenticationConfiguration.getAuthenticationManager(),
                         objectMapper,
-                        jwtUtils, environmentUtils))
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                        jwtUtils, environmentUtils));
+        return http.build();
     }
 
     @Bean

@@ -29,8 +29,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import jakarta.transaction.Transactional;
+
 import javax.imageio.ImageIO;
-import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.security.Principal;
 import java.util.Collections;

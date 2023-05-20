@@ -2,8 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  height: calc(100vh - 115px);
+  height: calc(100vh - 155px);
 }
 
 .login-container {

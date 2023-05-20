@@ -49,6 +49,10 @@ const LoginView = (): ReactElement => {
     setShowPasswordEmptyError(false);
   }, [loginData]);
 
+  useEffect(() => () => {
+    dispatch(setLoginError(false));
+  }, [dispatch]);
+
   if (isUserLoggedIn) {
     return <></>;
   }

@@ -3,10 +3,6 @@
   overflow: auto;
 }
 
-.container-placeholder {
-  height: 40px;
-}
-
 .loading-screen {
   display: flex;
   flex-direction: column;

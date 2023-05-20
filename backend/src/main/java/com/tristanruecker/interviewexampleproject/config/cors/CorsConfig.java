@@ -15,6 +15,6 @@ public class CorsConfig implements WebMvcConfigurer {
         log.debug("Setup Spring Cors configuration");
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000",
-                        "http://interview.test");
+                                "http://interview.test");
     }
 }

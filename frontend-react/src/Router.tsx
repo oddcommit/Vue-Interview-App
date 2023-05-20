@@ -30,7 +30,6 @@ const RouterComponent = (): ReactElement => {
   return (
     <>
       <NavbarComponent />
-      <div className="container-placeholder"></div>
       <Routes>
         <Route path="/users" element={<UsersView />} />
         <Route path="/register" element={<RegisterView />} />
