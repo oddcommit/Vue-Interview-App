@@ -8,11 +8,11 @@ postgresDatabase:
 
 backend:
   componentName: backend-api
-  currentVersion: 1.3.2
+  currentVersion: 1.3.3
 
 frontend:
   componentName: frontend-react
-  currentVersion: 1.3.2
+  currentVersion: 1.3.3
 
 ingress:
   url: gke-test.ruecker.dev
