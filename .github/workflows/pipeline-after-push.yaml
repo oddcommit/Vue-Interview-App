@@ -1,4 +1,4 @@
-name: Run standard build pipeline after push for interview-example-project
+name: Standard pipeline after push
 
 on:
   push:

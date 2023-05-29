@@ -1,4 +1,4 @@
-name: Create new deployment for interview-example-project
+name: Create docker container
 
 on:
   push:
@@ -89,7 +89,7 @@ jobs:
         working-directory: frontend-react
         run: |
           echo "--------------"
-          echo "Run npm:"
+          echo "npm version:"
           sh -c "node -v"
           echo "--------------"
           npm config get registry

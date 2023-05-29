@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-api-deployment
+  namespace: interview-example-project
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       component: backend-api
@@ -34,4 +35,4 @@ spec:
                   name: database-secret
                   key: password
             - name: POSTGRES_HOST
-              value: postgres-cluster-ip-service.default.svc.cluster.local
+              value: postgres-cluster-ip-service
