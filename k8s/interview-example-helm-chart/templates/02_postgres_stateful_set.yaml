@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
-  namespace: interview-example-project
+  name: postgres-database
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: postgres
-  serviceName: postgres
+      component: {{ .Values.postgresDatabase.componentName }}
+  serviceName: {{ .Values.postgresDatabase.componentName }}
   template:
     metadata:
       labels:
-        component: postgres
+        component: {{ .Values.postgresDatabase.componentName }}
     spec:
       containers:
-        - name: postgres
+        - name: {{ .Values.postgresDatabase.componentName }}
           image: docker.io/postgres:15.1
           ports:
             - containerPort: 5432
@@ -36,14 +36,14 @@ spec:
                   name: database-secret
                   key: password
             - name: PGDATA
-              value: /var/lib/postgresql/data/pg_data
+              value: {{ .Values.postgresDatabase.persistentVolumePath }}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data/pg_data
-              name: postgres-pvc
+            - mountPath: {{ .Values.postgresDatabase.persistentVolumePath }}
+              name: {{ .Values.postgresDatabase.persistentVolumeClaim }}
               subPath: postgres
   volumeClaimTemplates:
   - metadata:
-      name: postgres-pvc
+      name: {{ .Values.postgresDatabase.persistentVolumeClaim }}
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "standard"

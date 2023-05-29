@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-ip-service
-  namespace: interview-example-project
+  namespace: {{ .Values.namespace }}
 spec:
   type: ClusterIP
   selector:
-    component: frontend-react
+    component: {{ .Values.frontend.componentName }}
   ports:
     - name: http
       port: 80

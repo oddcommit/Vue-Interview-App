@@ -2,20 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-api-deployment
-  namespace: interview-example-project
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: backend-api
+      component: {{ .Values.backend.componentName }}
   template:
     metadata:
       labels:
-        component: backend-api
+        component: {{ .Values.backend.componentName }}
     spec:
       containers:
-        - name: backend-api
-          image: docker.io/21321321421441/interview-example-project-backend:latest
+        - name: {{ .Values.backend.componentName }}
+          image: docker.io/21321321421441/interview-example-project-backend:{{ .Values.backend.currentVersion }}
           ports:
             - containerPort: 4667
           env:

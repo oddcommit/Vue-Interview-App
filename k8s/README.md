@@ -1,7 +1,6 @@
-Manual Steps for infrastructure creation (only executed once per cluster):
+1. Manual Steps for infrastructure creation (only executed once per cluster)
 
-
-1. Install NGINX:
+1.1 Install NGINX:
 ```
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 ```
@@ -13,7 +12,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx
 ```
 
 
-2. Install Cert Manager:
+1.2 Install Cert Manager:
 ```
 helm repo add jetstack https://charts.jetstack.io
 ```
@@ -28,6 +27,20 @@ cert-manager jetstack/cert-manager \
 --version v1.12.0 \
 --set installCRDs=true
 ```
+
+2. Application installation:
+
+2.1 Navigate into the "k8s" folder then run:
+
+```
+helm upgrade --dry-run --install --create-namespace --namespace interview-example-project --values interview-example-helm-chart/values-PRODUCTION.yaml interview-example-helm-chart ./interview-example-helm-chart
+```
+
+2.2 After successful test run without dry-run
+```
+helm upgrade --install --create-namespace --namespace interview-example-project --values interview-example-helm-chart/values-PRODUCTION.yaml interview-example-helm-chart ./interview-example-helm-chart
+```
+
 
 ----------------------------------------------
 

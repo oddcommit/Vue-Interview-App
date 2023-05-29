@@ -2,16 +2,16 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt-prod
-  namespace: interview-example-project
+  namespace: {{ .Values.namespace }}
 spec:
   acme:
     # The ACME server URL
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: {{ .Values.certificate.url }}
     # Email address used for ACME registration
     email: #TODO: Add e-mail here
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: {{ .Values.certificate.issuer }}
     # Enable the HTTP-01 challenge provider
     solvers:
       - http01:

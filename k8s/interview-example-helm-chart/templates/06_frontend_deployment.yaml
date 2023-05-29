@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-react
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: {{ .Values.frontend.componentName }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.frontend.componentName }}
+    spec:
+      containers:
+        - name: {{ .Values.frontend.componentName }}
+          image: docker.io/21321321421441/interview-example-project-frontend:{{ .Values.frontend.currentVersion }}
+          ports:
+            - containerPort: 80

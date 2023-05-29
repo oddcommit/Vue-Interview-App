@@ -2,17 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: interview-example-ingress-service
-  namespace: interview-example-project
+  namespace: {{ .Values.namespace }}
   annotations:
-    cert-manager.io/issuer: "letsencrypt-staging"
+    cert-manager.io/issuer: {{ .Values.certificate.issuer }}
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - gke-test.ruecker.dev
+        - {{ .Values.ingress.url }}
       secretName: interview-example-tls
   rules:
-    - host: gke-test.ruecker.dev
+    - host: {{ .Values.ingress.url }}
       http:
         paths:
           - path: /api

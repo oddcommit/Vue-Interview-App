@@ -1,0 +1,23 @@
+# Staging values - since there is only one URL currently
+namespace: interview-example-project
+
+postgresDatabase:
+  componentName: postgres
+  persistentVolumePath: /var/lib/postgresql/data/pg_data
+  persistentVolumeClaim: postgres-pvc
+
+backend:
+  componentName: backend-api
+
+frontend:
+  componentName: frontend-react
+
+ingress:
+  url: gke-test.ruecker.dev
+
+certificate:
+  issuer: letsencrypt-staging
+  url: https://acme-staging-v02.api.letsencrypt.org/directory
+
+
+
