@@ -1,0 +1,6 @@
+{
+  "trailingComma": "none",
+  "tabWidth": 2,
+  "jsxBracketSameLine": true,
+  "printWidth": 120
+}

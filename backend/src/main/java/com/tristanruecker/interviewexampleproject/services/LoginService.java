@@ -133,12 +133,14 @@ public class LoginService {
         }
 
         try {
-            Optional<Captcha> captcha = captchaRepository.findById(UUID.fromString(userRegistrationDto.getCaptchaUuid()));
-            if (captcha.isEmpty()) {
+            Optional<Captcha> captchaOptional = captchaRepository.findById(UUID.fromString(userRegistrationDto.getCaptchaUuid()));
+            if (captchaOptional.isEmpty()) {
                 throw new CustomException(HttpStatus.TOO_MANY_REQUESTS, TextConstants.CAPTCHA_NOT_VALID_ANYMORE, errorFieldList);
             }
 
-            if (!userRegistrationDto.getCaptchaText().equals(captcha.get().getCaptchaText())) {
+            Captcha captcha = captchaOptional.get();
+
+            if (!userRegistrationDto.getCaptchaText().equals(captcha.getCaptchaText())) {
                 throw new CustomException(HttpStatus.TOO_MANY_REQUESTS, TextConstants.CAPTCHA_TEXT_INOUT_DOES_NOT_MATCH_CAPTCHA, errorFieldList);
             }
 
@@ -158,6 +160,7 @@ public class LoginService {
             userRole.setUser(user);
             user.setUserRoles(Collections.singleton(userRole));
             userRepository.save(user);
+            captchaRepository.deleteById(captcha.getUuid());
             //TODO: Send E-Mail verification link
         } catch (IllegalArgumentException exception) {
             throw new CustomException(HttpStatus.TOO_MANY_REQUESTS, TextConstants.CAPTCHA_CAN_NOT_DESERIALIZE_UUID, errorFieldList);

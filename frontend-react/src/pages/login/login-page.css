@@ -2,20 +2,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 155px);
+  font-size: 17px;
+  padding: 55px 13px;
 }
 
 .login-container {
   max-width: 480px;
   width: 100%;
-  box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 25%);
-  padding: 40px;
-  min-width: 200px;
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 25%);
+  padding: 30px 40px;
 }
 
-.login-container .login-button {
-  display: flex;
-  margin: 0 auto;
+.login-heading {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  width: 100%;
 }
 
 .login-container .login-form-error,
@@ -26,4 +31,15 @@
 .login-text-error {
   color: var(--bs-danger);
   margin-top: 5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-register-link {
+  margin-top: 35px;
+  font-size: 15px;
+}
+
+.login-register-link > a {
+  text-decoration: none;
 }

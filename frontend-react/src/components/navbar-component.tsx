@@ -10,27 +10,24 @@ const NavbarComponent = () => {
   const isUserLoggedIn = useSelector(selectIsLoggedIn);
   const location = useLocation();
 
-  const contitionalButtonRendering = () => {
+  const conditionalButtonRendering = () => {
     if (isUserLoggedIn) {
-      return <Button
-        variant="primary"
-        type="submit"
-        onClick={() => dispatch(logoutUser())}
-      >
-        Logout
-      </Button>
+      return (
+        <Button variant="primary" type="submit" onClick={() => dispatch(logoutUser())}>
+          Logout
+        </Button>
+      );
     }
 
-
-    if (location.pathname.startsWith('/register')) {
-      return <Link to="/">
+    return (
+      <Link to="/">
         <Button variant="primary">Login</Button>
       </Link>
-    } else {
-      return <Link to="/register">
-        <Button variant="primary">Register</Button>
-      </Link>
-    }
+    );
+  };
+
+  if (location.pathname === "/") {
+    return <></>;
   }
 
   return (
@@ -40,9 +37,7 @@ const NavbarComponent = () => {
           <h2 className="heading">Interview example project</h2>
         </li>
         <li>
-          <div className="nav-center-button">
-            {contitionalButtonRendering()}
-          </div>
+          <div className="nav-center-button">{conditionalButtonRendering()}</div>
         </li>
       </ul>
     </nav>

@@ -1,10 +1,14 @@
+.register {
+  padding: 10px;
+}
+
 .register-container {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
-  box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 25%);
+  padding: 30px 35px;
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 25%);
 }
 
 .register-error>label,
@@ -18,23 +22,26 @@
 }
 
 
-.captcha {
+.captcha > div {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  position: relative;
+  flex-direction: row;
 }
 
 .captcha>img {
   margin-right: 15px;
 }
 
-.captcha-input {
-  max-width: 150px;
+.captcha-refresh {
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  margin-left: 25px;
 }
 
-.captcha-refresh {
-  position: absolute;
-  right: 0;
-  cursor: pointer;
+
+.register-heading {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }

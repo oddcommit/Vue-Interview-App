@@ -7,13 +7,12 @@ import LoginLoadingButton from "./components/login-loading-button-component";
 import { loginUserRequest } from "./requests/login-requests";
 import { selectIsLoggedIn } from "./store/login-selectors";
 import "./login-page.css";
+import { Link } from "react-router-dom";
 
 const LoginView = (): ReactElement => {
   const dispatch: any = useDispatch();
 
-  const showLoginError = useSelector(
-    (state: RootState) => state.loginReducer.showLoginError
-  );
+  const showLoginError = useSelector((state: RootState) => state.loginReducer.showLoginError);
 
   const isUserLoggedIn = useSelector(selectIsLoggedIn);
 
@@ -22,7 +21,7 @@ const LoginView = (): ReactElement => {
 
   const [loginData, setLoginData] = useState({
     email: "",
-    password: "",
+    password: ""
   });
 
   const loginUser = (): void => {
@@ -49,9 +48,12 @@ const LoginView = (): ReactElement => {
     setShowPasswordEmptyError(false);
   }, [loginData]);
 
-  useEffect(() => () => {
-    dispatch(setLoginError(false));
-  }, [dispatch]);
+  useEffect(
+    () => () => {
+      dispatch(setLoginError(false));
+    },
+    [dispatch]
+  );
 
   if (isUserLoggedIn) {
     return <></>;
@@ -61,47 +63,46 @@ const LoginView = (): ReactElement => {
     <>
       <div className="login-centered">
         <div className="login-container">
+          <div className="login-heading">
+            <span>Sign in to your account</span>
+          </div>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address:</Form.Label>
             <Form.Control
-              bsPrefix={`form-control ${
-                showEmailEmptyError ? "login-form-error" : ""
-              }`}
+              bsPrefix={`form-control ${showEmailEmptyError ? "login-form-error" : ""}`}
               name="email"
               type="email"
               placeholder="Enter email"
               onChange={onChangeLoginData}
             />
 
-            {showEmailEmptyError && (
-              <div className="login-text-error">E-Mail can not be empty</div>
-            )}
+            {showEmailEmptyError && <div className="login-text-error">E-Mail can not be empty</div>}
           </Form.Group>
 
           <Form.Group controlId="formBasicPassword" className="mt-2">
             <Form.Label>Password:</Form.Label>
             <Form.Control
-              bsPrefix={`form-control ${
-                showPasswordEmptyError ? "login-form-error" : ""
-              }`}
+              bsPrefix={`form-control ${showPasswordEmptyError ? "login-form-error" : ""}`}
               name="password"
               type="password"
               placeholder="Password"
               onChange={onChangeLoginData}
             />
 
-            {showPasswordEmptyError && (
-              <div className="login-text-error">Password can not be empty</div>
-            )}
+            {showPasswordEmptyError && <div className="login-text-error">Password can not be empty</div>}
           </Form.Group>
 
           {showLoginError && (
-            <Alert variant={"danger"} className="mt-3 mb-3">
+            <Alert variant={"danger"} className="mt-4 mb-3">
               Sorry, wrong e-mail or wrong password!
             </Alert>
           )}
 
           <LoginLoadingButton onClickLoginUser={loginUser} />
+
+          <div className="login-register-link">
+            No account yet? <Link to="/register">Click to register here</Link>
+          </div>
         </div>
       </div>
     </>

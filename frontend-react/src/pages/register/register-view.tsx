@@ -1,12 +1,11 @@
 import { AxiosError, AxiosResponse } from "axios";
-import {ChangeEvent, useCallback, useEffect, useState} from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Alert, Button, FloatingLabel, Form } from "react-bootstrap";
 import { AxiosErrorMessage, ErrorField } from "../../App";
-import { BootstrapReboot } from 'react-bootstrap-icons';
+import { BootstrapReboot } from "react-bootstrap-icons";
 import axiosHttp from "../../utils/axios";
 import "./register-view.css";
 import { useNavigate } from "react-router-dom";
-
 
 interface CaptchaResponse {
   uuid: string;
@@ -53,12 +52,10 @@ const RegisterView = () => {
 
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     showError: false,
-    error: ''
+    error: ""
   });
 
-  const [registeredFormControls, setRegisteredFormControls] = useState<
-    Array<RegisterFormControl>
-  >([
+  const [registeredFormControls, setRegisteredFormControls] = useState<Array<RegisterFormControl>>([
     {
       key: "email",
       type: "email",
@@ -66,8 +63,8 @@ const RegisterView = () => {
       value: "",
       error: {
         isInvalid: false,
-        errorMessage: "Email can not be empty",
-      },
+        errorMessage: "Email can not be empty"
+      }
     },
     {
       key: "password",
@@ -76,8 +73,8 @@ const RegisterView = () => {
       value: "",
       error: {
         isInvalid: false,
-        errorMessage: "Password can not be empty",
-      },
+        errorMessage: "Password can not be empty"
+      }
     },
     {
       key: "name",
@@ -86,8 +83,8 @@ const RegisterView = () => {
       value: "",
       error: {
         isInvalid: false,
-        errorMessage: "Name can not be empty",
-      },
+        errorMessage: "Name can not be empty"
+      }
     },
     {
       key: "age",
@@ -96,8 +93,8 @@ const RegisterView = () => {
       value: "",
       error: {
         isInvalid: false,
-        errorMessage: "Age must be a number and can not be empty",
-      },
+        errorMessage: "Age must be a number and can not be empty"
+      }
     },
     {
       key: "gender",
@@ -106,22 +103,24 @@ const RegisterView = () => {
       value: "",
       error: {
         isInvalid: false,
-        errorMessage: "Please select a gender",
-      },
-    },
+        errorMessage: "Please select a gender"
+      }
+    }
   ]);
 
   const [captcha, setCaptcha] = useState<CaptchaInputData | null>(null);
 
   const refreshCaptcha = useCallback(() => {
-    axiosHttp
-      .get("/register/captcha")
-      .then((captchaResponse: AxiosResponse<CaptchaResponse>) => {
-        const responseData = captchaResponse.data;
-        const captcha: CaptchaInputData = { ...responseData, "captcha_text": "", "key": responseData.uuid };
-        setCaptcha(captcha);
-      });
-  }, [])
+    axiosHttp.get("/register/captcha").then((captchaResponse: AxiosResponse<CaptchaResponse>) => {
+      const responseData = captchaResponse.data;
+      const captcha: CaptchaInputData = {
+        ...responseData,
+        captcha_text: "",
+        key: responseData.uuid
+      };
+      setCaptcha(captcha);
+    });
+  }, []);
 
   useEffect(() => {
     if (!captcha) {
@@ -133,17 +132,18 @@ const RegisterView = () => {
     if (registrationSuccessful.registrationSuccessful) {
       const interval = setInterval(() => {
         if (registrationSuccessful.countdownTimer === 0) {
-          navigation('/');
+          navigation("/");
         }
-        setRegistrationSuccessful({ ...registrationSuccessful, "countdownTimer": registrationSuccessful.countdownTimer - 1 })
+        setRegistrationSuccessful({
+          ...registrationSuccessful,
+          countdownTimer: registrationSuccessful.countdownTimer - 1
+        });
       }, 1000);
       return () => clearInterval(interval);
     }
   }, [navigation, registrationSuccessful]);
 
-  const onChangeCaptchaData = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
+  const onChangeCaptchaData = (event: ChangeEvent<HTMLInputElement>): void => {
     if (captcha) {
       const captchaCopy: CaptchaInputData | null = {
         ...captcha
@@ -153,24 +153,16 @@ const RegisterView = () => {
     }
   };
 
-  const onChangeRegisterData = (
-    event: ChangeEvent<HTMLInputElement>,
-    index: number
-  ): void => {
+  const onChangeRegisterData = (event: ChangeEvent<HTMLInputElement>, index: number): void => {
     changeRegisterData(index, event.target.value);
   };
 
-  const onChangeRegisterSelectData = (
-    event: ChangeEvent<HTMLSelectElement>,
-    index: number
-  ): void => {
+  const onChangeRegisterSelectData = (event: ChangeEvent<HTMLSelectElement>, index: number): void => {
     changeRegisterData(index, event.target.value);
   };
 
   const changeRegisterData = (index: number, value: string): void => {
-    const registeredFormControlsCopy: Array<RegisterFormControl> = [
-      ...registeredFormControls,
-    ];
+    const registeredFormControlsCopy: Array<RegisterFormControl> = [...registeredFormControls];
 
     let registeredFormControlCopy = registeredFormControlsCopy[index];
 
@@ -185,74 +177,76 @@ const RegisterView = () => {
   const register = () => {
     const axiosRegisterObject: RegisterObject = {};
 
-    registeredFormControls.forEach(
-      (registeredFormControl: RegisterFormControl) => {
-        const { key, value } = registeredFormControl;
+    registeredFormControls.forEach((registeredFormControl: RegisterFormControl) => {
+      const { key, value } = registeredFormControl;
 
-        axiosRegisterObject[key] = Number(value) ? Number(value) : value;
-      }
-    );
+      axiosRegisterObject[key] = Number(value) ? Number(value) : value;
+    });
 
-    axiosRegisterObject["captcha_uuid"] = captcha ? captcha.uuid : '';
-    axiosRegisterObject["captcha_text"] = captcha ? captcha.captcha_text : '';
+    axiosRegisterObject["captcha_uuid"] = captcha ? captcha.uuid : "";
+    axiosRegisterObject["captcha_text"] = captcha ? captcha.captcha_text : "";
     axiosHttp
       .post("/register", axiosRegisterObject)
       .then((response) => {
         if (response.status === 201) {
-          setRegistrationSuccessful({ ...registrationSuccessful, "registrationSuccessful": true });
+          setRegistrationSuccessful({
+            ...registrationSuccessful,
+            registrationSuccessful: true
+          });
           errorMessage.showError = false;
           setErrorMessage(errorMessage);
         }
       })
       .catch((error: AxiosError<AxiosErrorMessage>) => {
-          const axiosError: AxiosResponse<AxiosErrorMessage> | undefined = error.response;
-          if (axiosError) {
-              const data = axiosError.data;
-              const errorMessageString = data.errorMessage;
+        const axiosError: AxiosResponse<AxiosErrorMessage> | undefined = error.response;
+        if (axiosError) {
+          const data = axiosError.data;
+          const errorMessageString = data.errorMessage;
 
-              if (errorMessageString) {
-                  showErrorMessage(errorMessageString);
-              }
-
-              const errorFieldArray: Array<ErrorField> | undefined = data.errorFields;
-              if (errorFieldArray) {
-                  const registeredFormControlsCopy: Array<RegisterFormControl> = [
-                      ...registeredFormControls,
-                  ]
-                  errorFieldArray.forEach(errorField => {
-                      let registeredFormControl = registeredFormControlsCopy.find(registeredFormControl => registeredFormControl.key === errorField.field);
-                      if (registeredFormControl) {
-                          let registeredFormControlError = registeredFormControl.error;
-                          registeredFormControlError.isInvalid = true;
-                          registeredFormControlError.errorMessage = errorField.errorMessage;
-                      } else {
-                          console.error(`Error field for: ${errorField.field} not found with potential error message: ${errorField.errorMessage}`)
-                      }
-                  });
-                  setRegisteredFormControls(registeredFormControlsCopy);
-              }
-          } else {
-              showErrorMessage("Something went terribly wrong. Please contact us!");
+          if (errorMessageString) {
+            showErrorMessage(errorMessageString);
           }
+
+          const errorFieldArray: Array<ErrorField> | undefined = data.errorFields;
+          if (errorFieldArray) {
+            const registeredFormControlsCopy: Array<RegisterFormControl> = [...registeredFormControls];
+            errorFieldArray.forEach((errorField) => {
+              let registeredFormControl = registeredFormControlsCopy.find(
+                (registeredFormControl) => registeredFormControl.key === errorField.field
+              );
+              if (registeredFormControl) {
+                let registeredFormControlError = registeredFormControl.error;
+                registeredFormControlError.isInvalid = true;
+                registeredFormControlError.errorMessage = errorField.errorMessage;
+              } else {
+                console.error(
+                  `Error field for: ${errorField.field} not found with potential error message: ${errorField.errorMessage}`
+                );
+              }
+            });
+            setRegisteredFormControls(registeredFormControlsCopy);
+          }
+        } else {
+          showErrorMessage("Something went terribly wrong. Please contact us!");
+        }
       });
   };
 
-
-    const showErrorMessage = (
-        errorMessageString: string): void => {
-        errorMessage.showError = true;
-        errorMessage.error = errorMessageString;
-        setErrorMessage({
-            ...errorMessage,
-        });
-    };
-
+  const showErrorMessage = (errorMessageString: string): void => {
+    errorMessage.showError = true;
+    errorMessage.error = errorMessageString;
+    setErrorMessage({
+      ...errorMessage
+    });
+  };
 
   return (
     <>
-      <div className="register-container">
-        {registeredFormControls.map(
-          (registerFormControl: RegisterFormControl, index: number) => {
+      <div className="register">
+        <div className="register-container">
+          <span className="register-heading">Create account</span>
+
+          {registeredFormControls.map((registerFormControl: RegisterFormControl, index: number) => {
             if (registerFormControl.type !== "select") {
               return (
                 <FloatingLabel
@@ -263,19 +257,13 @@ const RegisterView = () => {
                       ? registerFormControl.error.errorMessage
                       : registerFormControl.placeholder
                   }
-                  className={`mb-3 ${registerFormControl.error.isInvalid ? "register-error" : ""
-                    } `}
-                >
+                  className={`mb-3 ${registerFormControl.error.isInvalid ? "register-error" : ""} `}>
                   <Form.Control
                     name={registerFormControl.key}
                     type={registerFormControl.type}
                     placeholder={registerFormControl.placeholder}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      onChangeRegisterData(event, index)
-                    }
-                    className={
-                      registerFormControl.error.isInvalid ? "is-invalid" : ""
-                    }
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeRegisterData(event, index)}
+                    className={registerFormControl.error.isInvalid ? "is-invalid" : ""}
                   />
                 </FloatingLabel>
               );
@@ -286,18 +274,11 @@ const RegisterView = () => {
                 controlId={`formBasic${registerFormControl.key}`}
                 label="Gender"
                 key={registerFormControl.key}
-                className={`mb-3 ${registerFormControl.error.isInvalid ? "register-error" : ""
-                  }`}
-              >
+                className={`mb-3 ${registerFormControl.error.isInvalid ? "register-error" : ""}`}>
                 <Form.Select
                   aria-label="Floating label select example"
-                  onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                    onChangeRegisterSelectData(event, index)
-                  }
-                  className={
-                    registerFormControl.error.isInvalid ? "is-invalid" : ""
-                  }
-                >
+                  onChange={(event: ChangeEvent<HTMLSelectElement>) => onChangeRegisterSelectData(event, index)}
+                  className={registerFormControl.error.isInvalid ? "is-invalid" : ""}>
                   <option value="">Choose an option</option>
                   <option className="register-gender-select" value="MALE">
                     Male
@@ -308,27 +289,43 @@ const RegisterView = () => {
                 </Form.Select>
               </FloatingLabel>
             );
-          }
-        )}
+          })}
 
-        <div className="captcha mb-3">
-          <span>Captcha:</span>
-          <Form.Control type="text" placeholder="Captcha" className="captcha-input" onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeCaptchaData(event)} />
-          <img src={captcha?.captcha_image ? `data:image/png;base64, ${captcha?.captcha_image}` : ''} width="150px" height="50px" alt="Captcha" />
-          <BootstrapReboot className="captcha-refresh" size={30} onClick={() => refreshCaptcha()} />
+          <div className="captcha mb-3">
+            <div className="mb-2">Please enter the captcha code:</div>
+
+            <div className="mb-3">
+              <img
+                src={captcha?.captcha_image ? `data:image/png;base64, ${captcha?.captcha_image}` : ""}
+                width="150px"
+                height="50px"
+                alt="Captcha"
+              />
+              <div>
+                <BootstrapReboot className="captcha-refresh" size={36} onClick={() => refreshCaptcha()} />
+              </div>
+            </div>
+            <div>
+              <Form.Control
+                type="text"
+                placeholder="Captcha"
+                onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeCaptchaData(event)}
+              />
+            </div>
+          </div>
+
+          {registrationSuccessful.registrationSuccessful && (
+            <Alert key="success" variant="success">
+              Registration was successful. Redirect to login in {registrationSuccessful.countdownTimer} seconds..
+            </Alert>
+          )}
+          {errorMessage.showError && (
+            <Alert key="error" variant="danger">
+              {errorMessage.error}
+            </Alert>
+          )}
+          <Button onClick={register}>Register</Button>
         </div>
-
-        {registrationSuccessful.registrationSuccessful &&
-          <Alert key="success" variant="success">
-            Registration was successful. Redirect to login in {registrationSuccessful.countdownTimer} seconds..
-          </Alert>
-        }
-        {errorMessage.showError &&
-          <Alert key="error" variant="danger">
-            {errorMessage.error}
-          </Alert>
-        }
-        <Button onClick={register}>Register</Button>
       </div>
     </>
   );
