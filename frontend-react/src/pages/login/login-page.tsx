@@ -69,7 +69,8 @@ const LoginView = (): ReactElement => {
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address:</Form.Label>
             <Form.Control
-              bsPrefix={`form-control ${showEmailEmptyError ? "login-form-error" : ""}`}
+              className="login-empty-email"
+              isInvalid={showEmailEmptyError}
               name="email"
               type="email"
               placeholder="Enter email"
@@ -82,7 +83,8 @@ const LoginView = (): ReactElement => {
           <Form.Group controlId="formBasicPassword" className="mt-2">
             <Form.Label>Password:</Form.Label>
             <Form.Control
-              bsPrefix={`form-control ${showPasswordEmptyError ? "login-form-error" : ""}`}
+              className="login-empty-email"
+              isInvalid={showPasswordEmptyError}
               name="password"
               type="password"
               placeholder="Password"
