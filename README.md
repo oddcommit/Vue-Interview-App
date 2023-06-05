@@ -1,4 +1,4 @@
-Showcase (deployed on Google Kubernetes Engine (GKE):
+Showcase (deployed on Google Kubernetes Engine (GKE)):
 ===
 
 https://gke-test.ruecker.dev/
@@ -13,7 +13,7 @@ How to get started for development:
 ===
 
 1. Prerequisites:
- - Java 20 JDK (should also work with higher versions).
+ - Java 17
  - Maven >= 3.8.7 (should also work with lower versions)
  - Node.JS v16.13.2 (should also work with lower versions)
  - Docker Desktop => 2.x.x.x (should also work with lower versions)
@@ -39,7 +39,7 @@ InterviewExampleProjectApplication.java
 and press the green start button on the left.
 ```
 
-Hint: You can open http://localhost:4667/swagger-ui.html for the REST swagger documentation.
+Hint: You can open http://localhost:4667/api/swagger-ui/index.html#/ for the REST swagger documentation.
 
 4. Starting the frontend (NPM preffered but yarn could also be used):
 
